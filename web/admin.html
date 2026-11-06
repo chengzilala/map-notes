@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1677ff">
+<meta name="robots" content="noindex, nofollow">
+<title>留个点 · 同步</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/logo.svg">
+<style>
+  :root {
+    --bg: #f5f6f7;
+    --card: #ffffff;
+    --text: #1c1f23;
+    --muted: #8a9099;
+    --line: #eceef1;
+    --accent: #1677ff;
+    --ok: #138a4a;
+    --warn: #d4380d;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body {
+    padding: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px))
+            calc(28px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+    color: var(--text);
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 4px 0 16px;
+  }
+  header h1 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 600; }
+  header h1 img { width: 24px; height: 24px; display: block; border-radius: 6px; }
+  header a { padding: 6px 0; color: var(--accent); font-size: 14px; text-decoration: none; }
+  .card {
+    margin-bottom: 12px;
+    padding: 16px;
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(20, 26, 36, 0.05);
+  }
+  .card h2 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--muted); }
+  .row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 14px; }
+  .row span:first-child { color: var(--muted); flex: 0 0 auto; }
+  .row span:last-child { text-align: right; overflow-wrap: anywhere; line-height: 1.55; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 999px;
+    background: #f1f3f5;
+    color: var(--muted);
+  }
+  .badge.ok { color: var(--ok); background: #e8f7ee; }
+  .badge.warn { color: var(--warn); background: #fdecea; }
+  .actions { display: grid; gap: 10px; margin-top: 14px; }
+  .actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    text-decoration: none;
+  }
+  button {
+    width: 100%;
+    min-height: 46px;
+    font: inherit;
+    font-size: 15px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+  }
+  button.primary { color: #fff; background: var(--accent); border-color: var(--accent); }
+  button.danger { color: var(--warn); border-color: #f3c9c2; }
+  button:disabled { opacity: 0.55; }
+  .hint { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+  .qr {
+    display: none;
+    margin: 14px auto 4px;
+    width: 100%;
+    max-width: 340px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+  }
+  .qr.show { display: block; }
+  .qr-loading {
+    display: none;
+    padding: 36px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .qr-loading.show { display: block; }
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    max-width: calc(100vw - 48px);
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #fff;
+    background: rgba(28, 31, 35, 0.9);
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .toast.show { opacity: 1; }
+
+</style>
+</head>
+<body>
+<header>
+  <h1><img src="assets/img/logo.svg" alt="">同步</h1>
+  <a href="/">返回地图</a>
+</header>
+
+<section class="card">
+  <h2>收藏数据</h2>
+  <div class="row"><span>地点数</span><span id="favCount">—</span></div>
+  <div class="row"><span>更新时间</span><span id="favTime">—</span></div>
+  <div class="row"><span>新鲜度</span><span id="favFresh">—</span></div>
+  <div class="row" id="srcRow" hidden><span>来源</span><span id="srcList"></span></div>
+  <div class="row" id="syncErrorRow" hidden><span>同步说明</span><span id="syncError"></span></div>
+  <div class="actions">
+    <button id="syncBtn" type="button" class="primary">立即同步收藏</button>
+  </div>
+  <p class="hint">每天自动同步一次。点「立即同步」会等 20–60 秒，完成后刷新页面即可看到新地点。</p>
+</section>
+
+<section class="card">
+  <h2>高德登录态</h2>
+  <div class="row"><span>状态</span><span id="amapState">—</span></div>
+  <div class="row"><span>检查时间</span><span id="amapTime">—</span></div>
+  <div class="row" id="amapErrorRow" hidden><span>说明</span><span id="amapError"></span></div>
+  <div class="actions">
+    <button id="loginBtn" type="button">扫码登录高德</button>
+    <button id="clearBtn" type="button" class="danger">清除高德登录态</button>
+  </div>
+  <img id="qr" class="qr" alt="高德扫码登录">
+  <div id="qrLoading" class="qr-loading">正在打开高德登录页，请稍等…</div>
+  <p class="hint">用高德 App 扫上面的二维码，登录动作由你本人完成。如果这个页面就在手机上打开：长按二维码存到相册，再打开高德 App → 扫一扫 → 右上角「相册」选它。登录态只存在服务器上，可随时清除。</p>
+</section>
+
+<section class="card">
+  <h2>百度登录态</h2>
+  <div class="row"><span>状态</span><span id="baiduState">—</span></div>
+  <div class="row"><span>检查时间</span><span id="baiduTime">—</span></div>
+  <div class="row" id="baiduErrorRow" hidden><span>说明</span><span id="baiduError"></span></div>
+  <div class="actions">
+    <button id="baiduLoginBtn" type="button">扫码登录百度</button>
+    <button id="baiduClearBtn" type="button" class="danger">清除百度登录态</button>
+  </div>
+  <img id="baiduQr" class="qr" alt="百度扫码登录">
+  <div id="baiduQrLoading" class="qr-loading">正在打开百度登录页，请稍等…</div>
+  <p class="hint">用百度 App 扫上面的二维码。如果这个页面就在手机上打开：长按二维码存到相册，再打开百度 App → 扫一扫 → 相册选它。登录态只存在服务器上，可随时清除。</p>
+</section>
+
+<section class="card">
+  <h2>AI Key</h2>
+  <p class="hint">统一在账户中心配置，填一次，所有作品通用。</p>
+  <div class="actions">
+    <a href="https://account.chesterlee.cn/account.html#ai-key" target="_blank" rel="noopener">去账户中心配置 AI Key</a>
+  </div>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<script src="assets/js/account.js"></script>
+<script>
+(function () {
+  var status = null;
+  var qrTimers = {};
+  var qrConfig = {
+    amap: {
+      qr: 'qr', loading: 'qrLoading', label: '高德',
+      loginBtn: 'loginBtn', clearBtn: 'clearBtn',
+      img: '/api/amap/login/qr.png', status: '/api/amap/status'
+    },
+    baidu: {
+      qr: 'baiduQr', loading: 'baiduQrLoading', label: '百度',
+      loginBtn: 'baiduLoginBtn', clearBtn: 'baiduClearBtn',
+      img: '/api/baidu/login/qr.png', status: '/api/baidu/status'
+    }
+  };
+  var syncTimer = null;
+  var toastTimer = null;
+
+  function $(id) { return document.getElementById(id); }
+
+  function toast(text) {
+    var el = $('toast');
+    el.textContent = text;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2600);
+  }
+
+  function fmtTime(iso) {
+    if (!iso) return '—';
+    var date = new Date(iso);
+    if (isNaN(date.getTime())) return iso;
+    var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+    return (date.getMonth() + 1) + '-' + pad(date.getDate()) + ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes());
+  }
+
+  function fmtAge(hours) {
+    if (hours === null || hours === undefined) return '—';
+    if (hours < 1) return '刚刚';
+    if (hours < 24) return Math.round(hours) + ' 小时前';
+    return Math.round(hours / 24) + ' 天前';
+  }
+
+  function badge(text, tone) {
+    return '<span class="badge ' + (tone || '') + '">' + text + '</span>';
+  }
+
+  function render(data) {
+    status = data;
+    var fav = data.favorites || {};
+    var sync = data.sync || {};
+    var amap = data.amap || {};
+    var baidu = data.baidu || {};
+
+    $('favCount').textContent = (fav.count || 0) + ' 个';
+    $('favTime').textContent = fmtTime(fav.syncedAt);
+    var fresh = fmtAge(fav.ageHours);
+    $('favFresh').innerHTML = (fav.ageHours !== null && fav.ageHours > 72)
+      ? badge(fresh + '，建议同步', 'warn')
+      : badge(fresh, fav.ageHours !== null && fav.ageHours <= 72 ? 'ok' : '');
+
+    var sources = sync.sources || {};
+    var parts = [];
+    Object.keys(sources).forEach(function (key) {
+      var meta = sources[key] || {};
+      var name = key === 'amap' ? '高德' : (key === 'baidu' ? '百度' : key);
+      var tone = meta.status === 'ok' ? '正常'
+        : (meta.status === 'not_configured' ? '未登录' : '失败');
+      parts.push(name + ' ' + (meta.count || 0) + ' 个（' + tone + '）');
+    });
+    $('srcRow').hidden = !parts.length;
+    $('srcList').textContent = parts.join('；');
+
+    $('syncErrorRow').hidden = !sync.error;
+    $('syncError').textContent = sync.error || '';
+
+    $('syncBtn').disabled = Boolean(sync.running);
+    $('syncBtn').textContent = sync.running ? '正在同步…' : '立即同步收藏';
+
+    renderLogin('amap', amap);
+    renderLogin('baidu', baidu);
+
+    if (sync.running) startSyncPolling();
+    else stopSyncPolling();
+  }
+
+  function renderLogin(kind, data) {
+    var cfg = qrConfig[kind];
+    var stateText = { ok: '有效', expired: '已过期', pending: '等待扫码', unknown: '未登录' }[data.state] || '未知';
+    var stateTone = data.state === 'ok' ? 'ok' : (data.state === 'expired' ? 'warn' : '');
+    $(kind + 'State').innerHTML = badge(stateText, stateTone);
+    $(kind + 'Time').textContent = fmtTime(data.checkedAt);
+    $(kind + 'ErrorRow').hidden = !data.error;
+    $(kind + 'Error').textContent = data.error || '';
+
+    var btn = $(cfg.loginBtn);
+    btn.textContent = data.loginRunning
+      ? '正在等待扫码…'
+      : (data.state === 'ok' ? '重新扫码登录' + cfg.label : '扫码登录' + cfg.label);
+    btn.disabled = Boolean(data.loginRunning);
+    $(cfg.clearBtn).disabled = data.state !== 'ok';
+
+    if (data.loginRunning) {
+      startQrPolling(kind);
+    } else {
+      stopQrPolling(kind);
+      if (data.state === 'ok') {
+        $(cfg.qr).classList.remove('show');
+        $(cfg.loading).classList.remove('show');
+      }
+    }
+  }
+
+  function load() {
+    fetch('/api/status', { cache: 'no-store' })
+      .then(function (res) {
+        if (res.status === 401 || res.status === 403) throw new Error('login');
+        return res.json();
+      })
+      .then(render)
+      .catch(function (err) {
+        toast(err && err.message === 'login' ? '请先在首页登录统一账户' : '状态读取失败');
+      });
+  }
+
+  function startQrPolling(kind) {
+    var cfg = qrConfig[kind];
+    if (qrTimers[kind] && qrTimers[kind].timer) return;
+    var qr = $(cfg.qr);
+    $(cfg.loading).classList.add('show');
+    qr.classList.add('show');
+    qr.onload = function () { $(cfg.loading).classList.remove('show'); };
+    var state = { timer: null, scrolled: false };
+    if (!state.scrolled) {
+      state.scrolled = true;
+      setTimeout(function () {
+        var box = qr.getBoundingClientRect();
+        if (box.bottom > innerHeight || box.top < 0) {
+          qr.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+      }, 1500);
+    }
+    var tick = function () {
+      qr.src = cfg.img + '?t=' + Date.now();
+      fetch(cfg.status, { cache: 'no-store' })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.loginRunning) return;
+          stopQrPolling(kind);
+          if (data.state === 'ok') {
+            toast(cfg.label + '登录成功');
+            qr.classList.remove('show');
+          } else {
+            toast('二维码已失效，请重新点「扫码登录' + cfg.label + '」');
+          }
+          load();
+        })
+        .catch(function () {});
+    };
+    tick();
+    state.timer = setInterval(tick, 2000);
+    qrTimers[kind] = state;
+  }
+
+  function stopQrPolling(kind) {
+    var state = qrTimers[kind];
+    if (!state) return;
+    if (state.timer) clearInterval(state.timer);
+    delete qrTimers[kind];
+  }
+
+  function startSyncPolling() {
+    if (syncTimer) return;
+    syncTimer = setInterval(function () {
+      fetch('/api/status', { cache: 'no-store' })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          render(data);
+          if (!(data.sync && data.sync.running)) {
+            stopSyncPolling();
+            toast(data.sync && data.sync.ok ? '同步完成' : '同步失败，看上方说明');
+            load();
+          }
+        });
+    }, 3000);
+  }
+
+  function stopSyncPolling() {
+    if (!syncTimer) return;
+    clearInterval(syncTimer);
+    syncTimer = null;
+  }
+
+  $('syncBtn').addEventListener('click', function () {
+    var btn = this;
+    btn.disabled = true;
+    fetch('/api/sync/run', { method: 'POST' })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        toast(data.message || (data.ok ? '已开始同步' : '启动失败'));
+        if (data.ok) startSyncPolling();
+        else btn.disabled = false;
+      })
+      .catch(function () { toast('启动失败'); btn.disabled = false; });
+  });
+
+  $('loginBtn').addEventListener('click', function () {
+    fetch('/api/amap/login/start', { method: 'POST' })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        toast(data.message || '已打开高德登录页');
+        startQrPolling('amap');
+        load();
+      })
+      .catch(function () { toast('启动失败'); });
+  });
+
+  $('clearBtn').addEventListener('click', function () {
+    if (!confirm('清除后需要重新扫码才能同步收藏，确定吗？')) return;
+    fetch('/api/amap/logout', { method: 'POST' })
+      .then(function (res) { return res.json(); })
+      .then(function () {
+        toast('已清除登录态');
+        stopQrPolling('amap');
+        load();
+      })
+      .catch(function () { toast('清除失败'); });
+  });
+
+  $('baiduLoginBtn').addEventListener('click', function () {
+    fetch('/api/baidu/login/start', { method: 'POST' })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        toast(data.message || '已打开百度登录页');
+        startQrPolling('baidu');
+        load();
+      })
+      .catch(function () { toast('启动失败'); });
+  });
+
+  $('baiduClearBtn').addEventListener('click', function () {
+    if (!confirm('清除后需要重新扫码才能同步百度收藏，确定吗？')) return;
+    fetch('/api/baidu/logout', { method: 'POST' })
+      .then(function (res) { return res.json(); })
+      .then(function () {
+        toast('已清除百度登录态');
+        stopQrPolling('baidu');
+        load();
+      })
+      .catch(function () { toast('清除失败'); });
+  });
+
+  // 等统一账户把会话 cookie 换好再读状态（未登录时接口会回 401）
+  var authReady = (window.MNAuth && window.MNAuth.boot)
+    ? window.MNAuth.boot()
+    : Promise.resolve(null);
+  authReady.catch(function () {}).then(load);
+  setInterval(load, 20000);
+})();
+</script>
+<script src="assets/js/ps-auth.js"></script>
+</body>
+</html>

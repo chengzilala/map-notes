@@ -1,0 +1,12 @@
+[Unit]
+Description=map-notes 串行同步各用户收藏（高德 + 百度）
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ubuntu
+WorkingDirectory=/srv/chesterlee/map
+EnvironmentFile=/etc/map-notes/secrets.env
+ExecStart=/srv/chesterlee/map/.venv/bin/python /srv/chesterlee/map/tools/sync_worker.py
+TimeoutStartSec=3600

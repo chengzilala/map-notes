@@ -1,0 +1,58 @@
+# 构建产物
+web/dist/
+dist/
+*.zip
+*.crx
+debug.log
+__debug_*
+
+# 商店打包与素材产物（本机生成，不入库）
+release/
+
+# 私钥（一律不入库）
+*.pem
+
+# Trae 本地配置（规则/技能副本由「AI协作规划库」母本同步生成，不入库）
+.trae/
+
+# 个人文件（不入库）
+备忘录.md
+备忘录
+inbox/
+
+# 本机数据（收藏列表与我的备注，只留在本机）
+data/
+web/data/
+.env
+
+# 页面配置（含高德 Key 与安全密钥）：只在本机保留，不入库
+web/assets/js/config.js
+
+# 高德登录态（Playwright 持久化 profile）
+.sync-profile/
+.amap-profile/
+
+# 多用户登录态（按 uid 分开）与同步锁、数据库
+.sync-profiles/
+.sync-worker.lock
+*.db
+*.db-wal
+*.db-shm
+
+# 浏览器自动化产物（登录态 profile、截图缓存，只留在本机）
+.autoshot/
+.sync-profile/
+
+# 真实地图截图（含本人收藏与地点信息，不入库）；screenshots/store/ 合成数据截图除外
+screenshots/*.png
+.trae-html-share-packages/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 系统
+.DS_Store
+Thumbs.db

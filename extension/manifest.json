@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "留个点 · 地图收藏备注",
+  "version": "0.3.0",
+  "description": "在高德 / 百度地图网页上查看自己的收藏，就地写备注，按距离找附近。收藏只在本机读取，备注可选多设备同步。",
+  "homepage_url": "https://map.chesterlee.cn/site/",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://www.amap.com/*",
+    "https://map.baidu.com/*",
+    "https://map.chesterlee.cn/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.amap.com/*",
+        "https://map.baidu.com/*"
+      ],
+      "js": ["lib/parse.js", "content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://map.chesterlee.cn/*"],
+      "js": ["site-auth.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "留个点",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  }
+}

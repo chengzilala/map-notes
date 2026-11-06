@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="夜色地图上的收藏点与路线">
+  <defs>
+    <linearGradient id="hbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05070b"/>
+      <stop offset=".55" stop-color="#070b12"/>
+      <stop offset="1" stop-color="#0b1424"/>
+    </linearGradient>
+    <radialGradient id="hglow" cx=".68" cy=".36" r=".52">
+      <stop offset="0" stop-color="#1677ff" stop-opacity=".45"/>
+      <stop offset=".45" stop-color="#1677ff" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#1677ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hroute" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f4fbf" stop-opacity=".25"/>
+      <stop offset=".45" stop-color="#3d8bff"/>
+      <stop offset="1" stop-color="#b7d4ff"/>
+    </linearGradient>
+    <radialGradient id="hvig" cx=".62" cy=".42" r=".78">
+      <stop offset=".45" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".55"/>
+    </radialGradient>
+    <filter id="hsoft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="hsoft2" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+    <pattern id="hgrid" width="120" height="120" patternUnits="userSpaceOnUse">
+      <path d="M120 0H0V120" fill="none" stroke="#ffffff" stroke-opacity=".05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#hbg)"/>
+  <rect width="1600" height="900" fill="url(#hgrid)"/>
+
+  <!-- 城市路网 -->
+  <g transform="rotate(-14 800 450)" fill="none" stroke="#1b2637" stroke-width="2">
+    <path d="M-200 210H1900M-200 380H1900M-200 550H1900M-200 720H1900"/>
+    <path d="M180 -200V1100M420 -200V1100M660 -200V1100M900 -200V1100M1140 -200V1100M1380 -200V1100"/>
+  </g>
+  <g transform="rotate(-14 800 450)" fill="none" stroke="#26374f" stroke-width="7" stroke-opacity=".55">
+    <path d="M-200 380H1900"/>
+    <path d="M900 -200V1100"/>
+  </g>
+
+  <rect width="1600" height="900" fill="url(#hglow)"/>
+  <ellipse cx="1100" cy="330" rx="430" ry="300" fill="#1677ff" opacity=".12" filter="url(#hsoft)"/>
+
+  <!-- 路线 -->
+  <path d="M150 790C380 700 470 615 700 552C900 496 1010 462 1140 396C1250 340 1330 288 1470 212"
+        fill="none" stroke="#1677ff" stroke-opacity=".55" stroke-width="28" filter="url(#hsoft)"/>
+  <path d="M150 790C380 700 470 615 700 552C900 496 1010 462 1140 396C1250 340 1330 288 1470 212"
+        fill="none" stroke="url(#hroute)" stroke-width="4"/>
+
+  <!-- 收藏点 -->
+  <g>
+    <circle cx="330" cy="722" r="16" fill="#1677ff" opacity=".45" filter="url(#hsoft2)"/>
+    <circle cx="330" cy="722" r="8" fill="#1677ff" stroke="#dbeaff" stroke-width="2"/>
+    <circle cx="742" cy="540" r="26" fill="#1677ff" opacity=".4" filter="url(#hsoft2)"/>
+    <circle cx="742" cy="540" r="11" fill="#1677ff" stroke="#eaf2ff" stroke-width="2.5"/>
+    <circle cx="1140" cy="396" r="30" fill="#1677ff" opacity=".45" filter="url(#hsoft2)"/>
+    <circle cx="1140" cy="396" r="12" fill="#1677ff" stroke="#fff" stroke-width="3"/>
+    <circle cx="1470" cy="212" r="9" fill="#1677ff" stroke="#dbeaff" stroke-width="2"/>
+  </g>
+
+  <!-- 零散光点 -->
+  <g fill="#cfe0ff">
+    <circle cx="520" cy="250" r="2" opacity=".5"/>
+    <circle cx="880" cy="180" r="2.5" opacity=".4"/>
+    <circle cx="1290" cy="600" r="2" opacity=".45"/>
+    <circle cx="1010" cy="700" r="2" opacity=".3"/>
+    <circle cx="240" cy="420" r="2" opacity=".35"/>
+    <circle cx="1360" cy="430" r="1.5" opacity=".5"/>
+  </g>
+
+  <rect width="1600" height="900" fill="url(#hvig)"/>
+</svg>

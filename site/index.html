@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>留个点 · 给每个收藏留一句话</title>
+<meta name="description" content="把地图里收藏的地点取到一处，写一句备注，按离我多远找到它。小范围开放，不分享。">
+<meta name="theme-color" content="#101a28">
+<meta property="og:title" content="留个点 · 给每个收藏留一句话">
+<meta property="og:description" content="地图收藏夹里的每个点，都该有句话。">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/img/logo-icon.svg" type="image/svg+xml">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+<!-- 贯穿全页的路线：滚动时一束光沿路从上到下走，经过各个区块时点亮节点 -->
+<div class="page-rail" id="pageRail" aria-hidden="true">
+  <svg class="rail-svg" viewBox="0 0 120 1000" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="railGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1000">
+        <stop offset="0" stop-color="#2b86ff"/>
+        <stop offset=".55" stop-color="#7cb2ff"/>
+        <stop offset="1" stop-color="#d9e9ff"/>
+      </linearGradient>
+    </defs>
+    <!-- 支路：让这条线看起来像路网，而不只是一根线；光点经过时依次点亮 -->
+    <g class="rail-branches">
+      <g class="rail-branch-group" data-y="120">
+        <path class="rail-branch" d="M61 120 C 40 130, 26 152, 22 180"/>
+        <path class="rail-branch-line" d="M61 120 C 40 130, 26 152, 22 180"/>
+        <circle class="rail-branch-dot" cx="22" cy="180" r="2.4"/>
+      </g>
+      <g class="rail-branch-group" data-y="330">
+        <path class="rail-branch" d="M60 330 C 86 344, 104 372, 108 412"/>
+        <path class="rail-branch-line" d="M60 330 C 86 344, 104 372, 108 412"/>
+        <circle class="rail-branch-dot" cx="108" cy="412" r="2.4"/>
+      </g>
+      <g class="rail-branch-group" data-y="690">
+        <path class="rail-branch" d="M60 690 C 36 706, 24 736, 26 776"/>
+        <path class="rail-branch-line" d="M60 690 C 36 706, 24 736, 26 776"/>
+        <circle class="rail-branch-dot" cx="26" cy="776" r="2.4"/>
+      </g>
+    </g>
+    <path id="railBed" class="rail-bed"
+          d="M60 -30 C 22 110, 98 200, 60 330 C 20 470, 100 550, 60 690 C 24 820, 96 910, 60 1030"/>
+    <path id="railPath" class="rail-line"
+          d="M60 -30 C 22 110, 98 200, 60 330 C 20 470, 100 550, 60 690 C 24 820, 96 910, 60 1030"/>
+    <!-- 随滚动「画」出来的实线：一条路从上面铺到下面 -->
+    <path id="railFill" class="rail-fill"
+          d="M60 -30 C 22 110, 98 200, 60 330 C 20 470, 100 550, 60 690 C 24 820, 96 910, 60 1030"/>
+    <g id="railNodes" class="rail-nodes"></g>
+  </svg>
+  <i class="rail-light" id="railLight"></i>
+  <i class="rail-trail t1" id="railTrail1"></i>
+  <i class="rail-trail t2" id="railTrail2"></i>
+</div>
+
+<header class="nav" id="nav">
+  <a class="nav-logo" href="#top" aria-label="留个点 首页">
+    <img src="assets/img/logo-icon.svg" alt="" width="152" height="152">
+    <span class="nav-name"><b>留个点</b><span>A DOT, A WORD</span></span>
+  </a>
+  <a class="btn btn-ghost" href="https://map.chesterlee.cn">进入应用 <span aria-hidden="true">↗</span></a>
+</header>
+
+<main>
+
+  <!-- 01 首屏 -->
+  <section class="hero" id="top">
+    <div class="hero-media">
+      <img src="assets/img/hero.svg" width="1600" height="900"
+           alt="" fetchpriority="high" decoding="async">
+    </div>
+    <div class="hero-veil" aria-hidden="true"></div>
+
+    <div class="hero-body">
+      <p class="eyebrow" data-reveal>地图收藏 · 地点笔记</p>
+      <h1 class="hero-title" data-split>给每个收藏<br>留一句话</h1>
+      <p class="hero-sub" data-reveal data-delay="1">地图里存了几百个地方，终于能写清为什么存，<br class="br-wide">也能按「离我多远」找到它。</p>
+      <div class="hero-actions" data-reveal data-delay="2">
+        <a class="btn btn-primary" href="https://map.chesterlee.cn">进入留个点 <span aria-hidden="true">→</span></a>
+        <a class="btn btn-text" href="#why">往下看 <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+
+    <div class="scroll-cue" id="scrollCue" aria-hidden="true"><i></i><span>SCROLL</span></div>
+  </section>
+
+  <!-- 02 宣言：滚动逐字点亮 -->
+  <section class="statement" id="why">
+    <p class="statement-text" data-words>收藏夹里躺着三百个地方，<br>一个都想不起，为什么当初要存下它。</p>
+    <p class="statement-note" data-reveal>现在，每一个点后面都能跟一句话。</p>
+  </section>
+
+  <!-- 03 三个能力：sticky 叠层 -->
+  <section class="features" id="features">
+    <article class="feature">
+      <div class="feature-media" data-parallax="0.12">
+        <img src="assets/img/feature-1.svg" width="1600" height="900"
+             alt="手机浮在地图上，屏幕上是一张地点备注卡" loading="lazy" decoding="async">
+      </div>
+      <div class="feature-body">
+        <span class="feature-index" aria-hidden="true">01</span>
+        <h2>点开就写，停手就存</h2>
+        <p>不用找保存按钮。备注跟着地点走，手机上写，电脑上看。</p>
+      </div>
+    </article>
+
+    <article class="feature">
+      <div class="feature-media" data-parallax="0.12">
+        <img src="assets/img/feature-2.svg" width="1600" height="900"
+             alt="夜色城市俯视图，一个亮点外面套着发光的同心距离圈" loading="lazy" decoding="async">
+      </div>
+      <div class="feature-body">
+        <span class="feature-index" aria-hidden="true">02</span>
+        <h2>附近，从近到远</h2>
+        <p>打开就是地图。三公里内的点，按离你的距离排好。</p>
+      </div>
+    </article>
+
+    <article class="feature">
+      <div class="feature-media" data-parallax="0.12">
+        <img src="assets/img/feature-3.svg" width="1600" height="900"
+             alt="两束蓝色光流汇成一条光河" loading="lazy" decoding="async">
+      </div>
+      <div class="feature-body">
+        <span class="feature-index" aria-hidden="true">03</span>
+        <h2>高德百度，一次收齐</h2>
+        <p>两个收藏夹合并成一处，来源标签随你筛。</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- 04 三步 -->
+  <section class="steps" id="how">
+    <ol class="step-list">
+      <li class="step" data-step>
+        <span class="step-num" aria-hidden="true">01</span>
+        <div class="step-copy">
+          <h3>同步收藏</h3>
+          <p>服务器每天自动取一次，不用你开电脑。</p>
+        </div>
+      </li>
+      <li class="step" data-step>
+        <span class="step-num" aria-hidden="true">02</span>
+        <div class="step-copy">
+          <h3>写一句话</h3>
+          <p>点开任意一个点，写下它为什么值得。</p>
+        </div>
+      </li>
+      <li class="step" data-step>
+        <span class="step-num" aria-hidden="true">03</span>
+        <div class="step-copy">
+          <h3>找附近</h3>
+          <p>定位一下，最近的地方排在最前面。</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 05 隐私 -->
+  <section class="privacy" id="privacy">
+    <h2 data-reveal>数据只留在你自己那里。</h2>
+    <ul class="privacy-list">
+      <li data-reveal><b>各自可见</b><span>每个账户只看到自己的点</span></li>
+      <li data-reveal data-delay="1"><b>不写回地图</b><span>收藏和备注都不动高德</span></li>
+      <li data-reveal data-delay="2"><b>没有公开链接</b><span>不分享，也不被搜索</span></li>
+    </ul>
+  </section>
+
+  <!-- 06 收尾 CTA -->
+  <section class="finale">
+    <h2 data-reveal>现在去看看，<br>你还存了什么。</h2>
+    <div data-reveal data-delay="1">
+      <a class="btn btn-primary btn-lg" href="https://map.chesterlee.cn">进入留个点 <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>© 2026 <a href="https://chesterlee.cn/" target="_blank" rel="noopener">Chester</a> · 留个点 · A DOT, A WORD</span>
+  <a href="privacy.html">隐私政策</a>
+  <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">陇ICP备2026009894号-2</a>
+  <a href="https://beian.mps.gov.cn/#/query/webSearch?code=62052302000062" target="_blank" rel="noopener"><img src="assets/img/beian-police.png" alt="公安备案" width="14" height="14">甘公网安备62052302000062号</a>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

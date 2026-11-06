@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="留个点">
+  <rect width="512" height="512" rx="112" fill="#1677ff"/>
+  <rect x="116" y="104" width="280" height="224" rx="76" fill="#ffffff"/>
+  <path d="M208 314 L246 394 Q256 410 266 394 L304 314 Z" fill="#ffffff"/>
+  <path d="M184 216 H328" fill="none" stroke="#1677ff" stroke-width="28" stroke-linecap="round"/>
+</svg>

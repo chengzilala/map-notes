@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" width="420" height="200" role="img" aria-label="留个点 · A DOT, A WORD">
+  <rect x="16" y="24" width="152" height="152" rx="33" fill="#1677ff"/>
+  <rect x="50.44" y="54.88" width="83.13" height="66.5" rx="22.56" fill="#ffffff"/>
+  <path d="M77.75 117.22 L89.03 140.97 Q92 145.72 94.97 140.97 L106.25 117.22 Z" fill="#ffffff"/>
+  <path d="M70.63 88.13 H113.38" fill="none" stroke="#1677ff" stroke-width="8.31" stroke-linecap="round"/>
+  <text x="196" y="108" fill="#1c1f23" font-size="62" font-weight="700" letter-spacing="2"
+        font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">留个点</text>
+  <text x="199" y="146" fill="#8a9099" font-size="14.5" font-weight="600" letter-spacing="5"
+        font-family="'Helvetica Neue',Arial,sans-serif">A DOT, A WORD</text>
+</svg>

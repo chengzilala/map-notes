@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1677ff">
+  <title>留个点 · 地点笔记</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="map"></div>
+  <div class="mn-map-fallback" id="mapFallback" hidden></div>
+
+  <header class="mn-top">
+    <div class="mn-bar">
+      <img class="mn-brand" src="assets/img/logo.svg" alt="留个点">
+      <button id="accountEntry" class="mn-avatar" type="button" aria-label="登录统一账户" title="登录统一账户">
+        <svg class="mn-avatar-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8.6" r="3.6"></circle>
+          <path d="M4.8 20.2c0-3.9 3.3-6.4 7.2-6.4s7.2 2.5 7.2 6.4"></path>
+        </svg>
+        <img class="mn-avatar-img" id="accountAvatar" alt="" hidden>
+      </button>
+      <div class="mn-search">
+        <input id="searchInput" type="search" placeholder="搜名称 / 地址 / 备注 / 标签" autocomplete="off" enterkeyhint="search">
+        <button id="locateBtn" class="mn-locate" type="button" title="定位我">◎</button>
+      </div>
+    </div>
+    <div class="mn-filter" id="sourceFilter" hidden></div>
+    <div class="mn-meta">
+      <span id="metaSync">正在读取数据…</span>
+      <span id="metaPos" title="点一下，在地图上设定「我在这」">未定位</span>
+    </div>
+  </header>
+
+  <section class="mn-sheet" id="sheet">
+    <div class="mn-sheet-head">
+      <button id="gripBtn" class="mn-grip" type="button" aria-label="展开或收起列表"></button>
+      <div class="mn-sheet-title">
+        <span id="listCount">—</span>
+        <span class="mn-sheet-actions">
+          <button id="radiusBtn" class="mn-radius" type="button">3 km 内</button>
+          <button id="sourceBtn" class="mn-radius" type="button" hidden>来源设置</button>
+        </span>
+      </div>
+    </div>
+    <div class="mn-source-settings" id="sourceSettings" hidden></div>
+    <ul id="list" class="mn-list"></ul>
+    <div id="empty" class="mn-empty" hidden></div>
+    <footer class="mn-footer">
+      <span>© 2026 <a href="https://chesterlee.cn/" target="_blank" rel="noopener">Chester</a></span>
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">陇ICP备2026009894号-2</a>
+      <a href="https://beian.mps.gov.cn/#/query/webSearch?code=62052302000062" target="_blank" rel="noopener"><img src="/assets/img/beian-police.png" alt="公安备案" width="14" height="14">甘公网安备62052302000062号</a>
+      <a href="/admin">同步</a>
+    </footer>
+  </section>
+
+  <article id="detail" class="mn-detail" hidden>
+    <header class="mn-detail-head">
+      <button id="detailBack" class="mn-back" type="button" aria-label="返回列表">‹ 返回</button>
+      <div class="mn-detail-title">
+        <h2 id="dName"></h2>
+        <p id="dMeta" class="mn-detail-meta"></p>
+      </div>
+      <button id="detailClose" class="mn-close" type="button" aria-label="关闭">×</button>
+    </header>
+    <p id="dAddr" class="mn-detail-addr"></p>
+    <p id="dTags" class="mn-tags"></p>
+    <textarea id="dNote" rows="1" placeholder="写点什么：二楼有插座、周末下午人少、停车从后门进…" disabled></textarea>
+    <div class="mn-save" id="saveRow" hidden>
+      <span id="saveDot" class="mn-dot"></span>
+      <span id="saveText"></span>
+    </div>
+  </article>
+
+  <div id="toast" class="mn-toast" hidden></div>
+
+  <div id="loginWall" class="mn-lock" hidden>
+    <div class="mn-lock-card">
+      <img src="assets/img/logo.svg" alt="留个点" width="56" height="56">
+      <h2>登录后查看</h2>
+      <p>收藏与备注只对本人账户开放。</p>
+      <button id="loginWallBtn" type="button">登录统一账户</button>
+    </div>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/account.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>隐私政策 · 留个点</title>
+<meta name="description" content="留个点（地图收藏备注扩展与网站）的隐私政策：收藏只在本机读取，不上传、不共享、不做广告；备注可选同步到你自己账户，按账户隔离。">
+<meta name="theme-color" content="#101a28">
+<link rel="icon" href="assets/img/logo-icon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --bg: #0b1018;
+    --panel: #121b28;
+    --line: rgba(126, 158, 200, .18);
+    --ink: #e8f0fb;
+    --muted: #9fb3cc;
+    --blue: #4f9dff;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.85 -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 22px 80px; }
+  header { display: flex; align-items: center; gap: 14px; margin-bottom: 34px; }
+  header img { width: 44px; height: 44px; border-radius: 11px; }
+  header b { font-size: 18px; letter-spacing: .5px; }
+  header span { display: block; font-size: 12px; color: var(--muted); letter-spacing: 2px; }
+  h1 { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
+  .meta { color: var(--muted); font-size: 14px; margin-bottom: 34px; }
+  h2 { font-size: 19px; margin: 38px 0 12px; padding-top: 22px; border-top: 1px solid var(--line); }
+  h3 { font-size: 16px; margin: 22px 0 8px; color: #cfe2ff; }
+  p, li { color: #d3e0f0; }
+  ul { padding-left: 1.2em; }
+  li { margin: 6px 0; }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin: 18px 0;
+  }
+  .card p { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14.5px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  code { background: rgba(126,158,200,.12); border-radius: 5px; padding: 1px 5px; font-size: 13.5px; }
+  footer { margin-top: 52px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; }
+  .back { display: inline-block; margin-bottom: 26px; color: var(--muted); font-size: 14px; }
+  .back:hover { color: var(--blue); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="./">← 返回留个点官网</a>
+
+  <header>
+    <img src="assets/img/logo-icon.svg" alt="">
+    <div><b>留个点</b><span>A DOT, A WORD</span></div>
+  </header>
+
+  <h1>隐私政策</h1>
+  <p class="meta">生效日期：2026-11-05 ｜ 适用产品：浏览器扩展「留个点 · 地图收藏备注」与网站 map.chesterlee.cn</p>
+
+  <div class="card">
+    <p><b>一句话总结：</b>扩展只在你自己的地图页面里读取你自己的收藏，收藏快照只留在本机；只有你写的<b>备注文本</b>会在登录统一账户后同步到你自己账户（可按需不用），并按账户隔离，不卖给任何人、不做广告。</p>
+  </div>
+
+  <h2>一、浏览器扩展</h2>
+
+  <h3>1. 扩展在哪些网站运行</h3>
+  <p>在高德地图（<code>https://www.amap.com</code>）和百度地图（<code>https://map.baidu.com</code>）读取你自己的收藏并注入侧栏；在 <code>https://map.chesterlee.cn</code>（本站）仅做两件事：读取你自己的本站登录态、同步备注。不读取其他网站。</p>
+
+  <h3>2. 扩展读取什么</h3>
+  <ul>
+    <li>在你已登录的地图页面内，以你自己的登录态请求该网站「我的收藏」接口，读取你自己的收藏地点（名称、地址、坐标、标签等）。</li>
+    <li>请求只在打开地图页面、点开侧栏或点「刷新」时发起，不后台轮询、不高频访问。</li>
+    <li>不读取你的浏览历史、书签、其他标签页内容，也不读取与收藏无关的数据。</li>
+  </ul>
+
+  <h3>3. 扩展保存什么、保存在哪里</h3>
+  <ul>
+    <li>收藏缓存、你写的备注、排序与筛选偏好，保存在浏览器本地存储 <code>chrome.storage.local</code>。</li>
+    <li><b>收藏快照不上传</b>。只有你写的<b>备注文本</b>（不含收藏名称、地址、坐标）会在你登录统一账户后同步到 <code>map.chesterlee.cn</code>，按账户（uid）隔离保存，用于你在其他设备上看到同一份备注；不登录则完全不联网上传。</li>
+    <li>同步走本站自家服务器，不经过任何第三方；每分钟请求次数受限，超限会被拒绝。</li>
+    <li>卸载扩展或在浏览器中清除扩展数据，本机数据即被删除；要删除云端备注，可在网站删除备注或联系本站删除账户数据。</li>
+  </ul>
+
+  <h3>4. 权限说明</h3>
+  <table>
+    <tr><th>权限</th><th>用途</th></tr>
+    <tr><td><code>storage</code></td><td>仅在本地保存收藏缓存、备注与显示偏好，并保存你自己的本站登录 Token 用于备注同步。</td></tr>
+    <tr><td>主机权限 <code>www.amap.com</code>、<code>map.baidu.com</code></td><td>在页面内读取你自己的收藏接口，并注入「留个点」侧栏。</td></tr>
+    <tr><td>主机权限 <code>map.chesterlee.cn</code></td><td>读取你自己的本站登录态，以及读写你自己的备注（同步用）。不读取本站其他内容。</td></tr>
+  </table>
+
+  <h3>5. 扩展不做什么</h3>
+  <ul>
+    <li>不上传收藏快照，不把你的收藏或备注用于广告、画像，也不向任何第三方提供。</li>
+    <li>不写回、不修改高德 / 百度地图里的任何数据。</li>
+    <li>不含远程代码、不含第三方统计或广告脚本。</li>
+    <li>不登录统一账户就不会有任何上传；同步只针对备注文本，且随时可在网站上删除。</li>
+  </ul>
+
+  <h2>二、网站（map.chesterlee.cn）</h2>
+
+  <h3>1. 登录</h3>
+  <p>网站使用统一账户中心（<code>account.chesterlee.cn</code>）完成登录。本站不接触、不保存你的密码；登录后拿到一个账户标识（uid），用于区分每个人的数据。</p>
+
+  <h3>2. 保存的数据</h3>
+  <ul>
+    <li>你自己的地图收藏、你写的备注、来源与显示偏好、同步状态。</li>
+    <li>为自动同步收藏，服务器会按 uid 单独保存你的高德 / 百度登录态（仅保存在本站服务器本机目录，不对外提供）。</li>
+    <li>以上数据按 uid 隔离，只有你本人登录后才能读取；本站不提供公开链接、不提供分享。</li>
+  </ul>
+
+  <h3>3. Cookie</h3>
+  <p>登录后本站会写入一个会话 Cookie <code>mn_session</code>（HttpOnly，约 7 天有效），只用于识别「这次请求是谁」，不用于广告或跨站跟踪。</p>
+
+  <h3>4. 数据用途与共享</h3>
+  <ul>
+    <li>仅用于向你展示你自己的收藏、备注与同步状态。</li>
+    <li>不向任何第三方出售、出租或提供你的收藏与备注。</li>
+    <li>为实现功能，会与高德 / 百度（读取你自己的收藏）、账户中心（登录）与云服务器（数据存放）发生必要交互；除此之外不做其他传输。</li>
+    <li>本站不含第三方广告、不含第三方统计分析。</li>
+  </ul>
+
+  <h3>5. 保存期限与删除</h3>
+  <ul>
+    <li>数据在你的账户存续期间保存；你可以随时联系本站要求删除你的账户数据（含收藏、备注与登录态）。</li>
+    <li>删除后不可恢复；扩展本机的数据需你在浏览器中自行清除。</li>
+  </ul>
+
+  <h2>三、未成年人</h2>
+  <p>本产品不面向未成年人单独提供服务，也不会主动收集未成年人的个人信息。</p>
+
+  <h2>四、政策更新</h2>
+  <p>功能或数据处理方式发生变化时，会更新本页并修改顶部生效日期。重大变化会在官网或扩展更新说明中提示。</p>
+
+  <h2>五、联系我们</h2>
+  <p>与隐私相关的问题、数据删除请求，请联系：<a href="mailto:2195542745@qq.com">2195542745@qq.com</a>。</p>
+
+  <footer>
+    <div>© 2026 Chester · 留个点 · A DOT, A WORD</div>
+    <div><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">陇ICP备2026009894号-2</a> · 甘公网安备62052302000062号</div>
+  </footer>
+
+</div>
+</body>
+</html>

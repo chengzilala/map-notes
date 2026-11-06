@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="手机上的一张地点备注卡">
+  <defs>
+    <linearGradient id="fbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#06080d"/>
+      <stop offset=".6" stop-color="#080c14"/>
+      <stop offset="1" stop-color="#0c1524"/>
+    </linearGradient>
+    <linearGradient id="fphone" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#131b27"/>
+      <stop offset=".5" stop-color="#0b111b"/>
+      <stop offset="1" stop-color="#141d2b"/>
+    </linearGradient>
+    <linearGradient id="fscreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a1018"/>
+      <stop offset="1" stop-color="#0e1826"/>
+    </linearGradient>
+    <linearGradient id="fcard" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#152134"/>
+      <stop offset="1" stop-color="#0e1727"/>
+    </linearGradient>
+    <radialGradient id="fglow" cx=".7" cy=".4" r=".5">
+      <stop offset="0" stop-color="#1677ff" stop-opacity=".4"/>
+      <stop offset=".5" stop-color="#1677ff" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#1677ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fvig" cx=".65" cy=".45" r=".8">
+      <stop offset=".45" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".6"/>
+    </radialGradient>
+    <filter id="fsoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    <filter id="fsoft2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+    <clipPath id="fclip">
+      <rect x="1008" y="128" width="324" height="614" rx="42"/>
+    </clipPath>
+    <pattern id="fgrid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#ffffff" stroke-opacity=".045" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#fbg)"/>
+  <rect width="1600" height="900" fill="url(#fgrid)"/>
+  <rect width="1600" height="900" fill="url(#fglow)"/>
+
+  <!-- 背后的地图线条 -->
+  <g fill="none" stroke="#1a2638" stroke-width="2" transform="rotate(-10 800 450)">
+    <path d="M-100 300H1700M-100 520H1700M-100 740H1700"/>
+    <path d="M300 -100V1000M620 -100V1000M940 -100V1000M1260 -100V1000"/>
+  </g>
+  <path d="M240 800C520 720 660 600 900 560C1080 530 1220 470 1400 360"
+        fill="none" stroke="#1677ff" stroke-opacity=".35" stroke-width="3"/>
+
+  <ellipse cx="1160" cy="430" rx="330" ry="330" fill="#1677ff" opacity=".16" filter="url(#fsoft)"/>
+  <ellipse cx="1170" cy="800" rx="230" ry="34" fill="#000" opacity=".55" filter="url(#fsoft2)"/>
+
+  <!-- 手机 -->
+  <rect x="990" y="110" width="360" height="650" rx="56" fill="url(#fphone)" stroke="#2b3a52" stroke-width="2"/>
+  <rect x="1008" y="128" width="324" height="614" rx="42" fill="url(#fscreen)"/>
+
+  <g clip-path="url(#fclip)">
+    <g fill="none" stroke="#ffffff" stroke-opacity=".05">
+      <path d="M1020 200H1320M1020 300H1320M1020 400H1320M1020 500H1320M1020 600H1320M1020 700H1320"/>
+      <path d="M1080 140V720M1160 140V720M1240 140V720"/>
+    </g>
+    <path d="M1000 640C1080 600 1120 540 1220 510C1290 490 1330 460 1360 420"
+          fill="none" stroke="#1677ff" stroke-opacity=".5" stroke-width="2.5"/>
+
+    <!-- 顶部搜索条 -->
+    <rect x="1030" y="158" width="280" height="42" rx="21" fill="#111c2c" stroke="#203049" stroke-width="1"/>
+    <circle cx="1056" cy="179" r="6" fill="none" stroke="#5f7fa8" stroke-width="2"/>
+    <rect x="1074" y="175" width="120" height="8" rx="4" fill="#24344c"/>
+
+    <!-- 备注卡 -->
+    <rect x="1030" y="486" width="280" height="188" rx="22" fill="url(#fcard)" stroke="#263a56" stroke-width="1.5"/>
+    <circle cx="1058" cy="518" r="9" fill="#1677ff"/>
+    <circle cx="1058" cy="518" r="16" fill="#1677ff" opacity=".28"/>
+    <rect x="1082" y="510" width="138" height="12" rx="6" fill="#c9d8ea"/>
+    <rect x="1082" y="530" width="92" height="8" rx="4" fill="#5c7899"/>
+    <rect x="1058" y="566" width="210" height="9" rx="4.5" fill="#33445c"/>
+    <rect x="1058" y="588" width="176" height="9" rx="4.5" fill="#2b3a50"/>
+    <rect x="1058" y="610" width="120" height="9" rx="4.5" fill="#243248"/>
+    <rect x="1058" y="640" width="58" height="18" rx="9" fill="#1677ff" fill-opacity=".22" stroke="#1677ff" stroke-opacity=".5"/>
+
+    <!-- 屏幕顶部光 -->
+    <ellipse cx="1170" cy="150" rx="200" ry="90" fill="#1677ff" opacity=".16" filter="url(#fsoft2)"/>
+  </g>
+
+  <!-- 蓝色轮廓光 -->
+  <path d="M1002 190C990 260 990 620 1004 700" fill="none" stroke="#1677ff" stroke-opacity=".75" stroke-width="3" filter="url(#fsoft2)"/>
+  <path d="M1002 190C990 260 990 620 1004 700" fill="none" stroke="#8fc0ff" stroke-opacity=".5" stroke-width="1.4"/>
+
+  <!-- 零散点 -->
+  <g>
+    <circle cx="1420" cy="250" r="7" fill="#1677ff" opacity=".7"/>
+    <circle cx="1420" cy="250" r="22" fill="#1677ff" opacity=".22" filter="url(#fsoft2)"/>
+    <circle cx="300" cy="620" r="6" fill="#8fc0ff" opacity=".55"/>
+    <circle cx="300" cy="620" r="20" fill="#1677ff" opacity=".18" filter="url(#fsoft2)"/>
+    <circle cx="720" cy="230" r="2.5" fill="#cfe0ff" opacity=".4"/>
+    <circle cx="380" cy="300" r="2" fill="#cfe0ff" opacity=".35"/>
+  </g>
+
+  <rect width="1600" height="900" fill="url(#fvig)"/>
+</svg>

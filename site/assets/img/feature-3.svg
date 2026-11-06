@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="两束蓝色光流汇成一条光河">
+  <defs>
+    <linearGradient id="tbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05070b"/>
+      <stop offset=".55" stop-color="#070b13"/>
+      <stop offset="1" stop-color="#0a1220"/>
+    </linearGradient>
+    <linearGradient id="tA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f4fbf" stop-opacity="0"/>
+      <stop offset=".35" stop-color="#2f7dff" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#cfe4ff"/>
+    </linearGradient>
+    <linearGradient id="tB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f4fbf" stop-opacity="0"/>
+      <stop offset=".35" stop-color="#4d94ff" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#dcebff"/>
+    </linearGradient>
+    <linearGradient id="tC" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#dcebff"/>
+      <stop offset="1" stop-color="#1677ff" stop-opacity=".2"/>
+    </linearGradient>
+    <radialGradient id="tglow" cx=".72" cy=".46" r=".42">
+      <stop offset="0" stop-color="#1677ff" stop-opacity=".42"/>
+      <stop offset=".55" stop-color="#1677ff" stop-opacity=".1"/>
+      <stop offset="1" stop-color="#1677ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tvig" cx=".65" cy=".45" r=".8">
+      <stop offset=".42" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".62"/>
+    </radialGradient>
+    <filter id="tsoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    <filter id="tsoft2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#tbg)"/>
+
+  <!-- 背景细线 -->
+  <g fill="none" stroke="#ffffff" stroke-opacity=".035" stroke-width="1">
+    <path d="M0 150H1600M0 310H1600M0 470H1600M0 630H1600M0 790H1600"/>
+    <path d="M200 0V900M430 0V900M660 0V900M890 0V900M1120 0V900M1350 0V900"/>
+  </g>
+  <g fill="none" stroke="#1677ff" stroke-opacity=".10" stroke-width="1">
+    <circle cx="1180" cy="420" r="240"/>
+    <circle cx="1180" cy="420" r="400"/>
+  </g>
+
+  <rect width="1600" height="900" fill="url(#tglow)"/>
+
+  <!-- 光流（柔光层） -->
+  <g fill="none" stroke-linecap="round" filter="url(#tsoft)">
+    <path d="M-60 250C300 230 520 320 780 410S1080 470 1260 424" stroke="#1677ff" stroke-opacity=".55" stroke-width="26"/>
+    <path d="M-60 700C320 760 560 610 810 500S1080 436 1260 424" stroke="#1677ff" stroke-opacity=".45" stroke-width="26"/>
+    <path d="M1260 424C1400 400 1500 390 1680 376" stroke="#6ea8ff" stroke-opacity=".5" stroke-width="34"/>
+  </g>
+
+  <!-- 光流（实线） -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M-60 250C300 230 520 320 780 410S1080 470 1260 424" stroke="url(#tA)" stroke-width="5"/>
+    <path d="M-60 700C320 760 560 610 810 500S1080 436 1260 424" stroke="url(#tB)" stroke-width="5"/>
+    <path d="M1260 424C1400 400 1500 390 1680 376" stroke="url(#tC)" stroke-width="8"/>
+  </g>
+
+  <!-- 汇合点 -->
+  <circle cx="1260" cy="424" r="52" fill="#1677ff" opacity=".45" filter="url(#tsoft)"/>
+  <circle cx="1260" cy="424" r="12" fill="#ffffff" opacity=".95"/>
+  <circle cx="1260" cy="424" r="24" fill="none" stroke="#b7d4ff" stroke-opacity=".6" stroke-width="1.5"/>
+
+  <!-- 沿线粒子 -->
+  <g fill="#cfe4ff">
+    <circle cx="180" cy="258" r="3" opacity=".7"/>
+    <circle cx="430" cy="292" r="2.4" opacity=".55"/>
+    <circle cx="660" cy="368" r="3" opacity=".65"/>
+    <circle cx="940" cy="452" r="2.2" opacity=".5"/>
+    <circle cx="150" cy="716" r="2.6" opacity=".55"/>
+    <circle cx="470" cy="700" r="2.2" opacity=".45"/>
+    <circle cx="720" cy="560" r="2.8" opacity=".6"/>
+    <circle cx="1000" cy="452" r="2.2" opacity=".5"/>
+    <circle cx="1430" cy="396" r="3" opacity=".65"/>
+  </g>
+
+  <rect width="1600" height="900" fill="url(#tvig)"/>
+</svg>

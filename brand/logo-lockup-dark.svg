@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" width="420" height="200" role="img" aria-label="点记 · PIN &amp; NOTE">
+  <defs>
+    <linearGradient id="mnChipLk" x1="16" y1="24" x2="168" y2="176" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b5cff"/>
+      <stop offset="1" stop-color="#4f9dff"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="24" width="152" height="152" rx="33" fill="url(#mnChipLk)"/>
+  <path d="M46.88 110.69 L77.75 89.31 L108.63 110.69 L137.13 89.31"
+        fill="none" stroke="#ffffff" stroke-width="13.66"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="108.63" cy="110.69" r="10.09" fill="#ffffff"/>
+  <text x="196" y="108" fill="#1c1f23" font-size="62" font-weight="700" letter-spacing="2"
+        font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">点记</text>
+  <text x="199" y="146" fill="#8a9099" font-size="14.5" font-weight="600" letter-spacing="5"
+        font-family="'Helvetica Neue',Arial,sans-serif">PIN &amp; NOTE</text>
+</svg>

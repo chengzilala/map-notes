@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>留个点 · Logo 与设计理念（第二版）</title>
+<style>
+  :root{
+    --bg:#f5f6f7;--card:#ffffff;--text:#1c1f23;--muted:#8a9099;--line:#eceef1;
+    --accent:#1677ff;--accent-weak:#e9f1ff;--ink:#14181d;
+    --mono:ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+    line-height:1.8;font-size:15px;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px 90px}
+  header.top{
+    position:sticky;top:0;z-index:5;backdrop-filter:blur(12px);
+    background:rgba(245,246,247,.88);border-bottom:1px solid var(--line);
+  }
+  .top-in{max-width:1000px;margin:0 auto;padding:14px 36px 14px 28px;display:flex;align-items:center;gap:12px}
+  .top-in img{width:34px;height:34px;border-radius:9px;display:block}
+  .top-in b{font-size:15px;letter-spacing:.5px}
+  .top-in span{color:var(--muted);font-size:12px;letter-spacing:2px;margin-left:auto}
+  .top-in a{color:var(--muted);font-size:12.5px;text-decoration:none;border:1px solid var(--line);
+    background:var(--card);padding:5px 11px;border-radius:6px}
+  .top-in a:hover{color:#fff;background:var(--accent);border-color:var(--accent)}
+
+  .hero{display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:center;padding:60px 0 46px}
+  .hero img{width:200px;height:200px;display:block;border-radius:44px;box-shadow:0 18px 44px rgba(22,119,255,.2)}
+  .kick{color:var(--accent);font-size:11.5px;letter-spacing:3px;font-weight:600;margin:0 0 12px}
+  h1{margin:0;font-size:38px;line-height:1.15;letter-spacing:2px}
+  .tag{color:var(--muted);font-size:12px;letter-spacing:5px;margin-top:12px}
+  .lead{color:#4a5158;font-size:14.5px;line-height:1.9;margin:20px 0 0;max-width:580px}
+
+  section{padding:38px 0;border-top:1px solid var(--line)}
+  h2{margin:0 0 6px;font-size:19px;letter-spacing:.5px;display:flex;align-items:center;gap:9px}
+  h2::before{content:"";width:3px;height:16px;border-radius:2px;background:var(--accent)}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 24px}
+  h3{margin:30px 0 10px;font-size:15.5px;letter-spacing:.4px}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0 6px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-size:12.5px;letter-spacing:.06em;font-weight:600;border-bottom:1px solid #dde1e6}
+  td b{color:#000;font-weight:600}
+  tr:hover td{background:rgba(22,119,255,.04)}
+  code{font-family:var(--mono);font-size:12.8px;background:#eef1f5;border:1px solid var(--line);
+    border-radius:5px;padding:1px 5px;word-break:break-all}
+
+  .idea{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 4px}
+  .idea div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .idea b{display:block;font-size:14px;margin-bottom:6px}
+  .idea p{margin:0;color:#4a5158;font-size:13.5px;line-height:1.85}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+  .card img{width:120px;height:120px;display:block;margin:0 auto;border-radius:26px}
+  .card b{display:block;margin-top:16px;font-size:13.5px}
+  .card p{margin:4px 0 0;color:var(--muted);font-size:12.5px;line-height:1.7}
+
+  .locks{display:grid;gap:16px}
+  .lock{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px}
+  .lock.dark{background:var(--ink);border-color:#242b33}
+  .lock img{width:100%;max-width:420px;height:auto;display:block}
+  .lock .cap{font-size:12px;color:var(--muted);margin-top:12px}
+
+  .sizes{display:flex;align-items:flex-end;gap:34px;flex-wrap:wrap;background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:26px}
+  .sz{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--muted);
+    font-size:11.5px;letter-spacing:1px}
+  .sz img{display:block}
+
+  .colors{display:flex;gap:14px;flex-wrap:wrap}
+  .c{flex:1;min-width:130px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+  .c .sw{height:74px}
+  .c .meta{padding:11px 13px;font-size:11.5px;line-height:1.7;color:var(--muted)}
+  .c .meta b{display:block;font-size:12.5px;color:var(--text);letter-spacing:.5px;margin-bottom:2px}
+
+  .files{display:grid;gap:9px}
+  .file{display:flex;align-items:center;gap:12px;padding:12px 15px;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;font-size:13.5px;text-decoration:none;color:var(--text)}
+  .file:hover{border-color:var(--accent)}
+  .file span{color:var(--muted);font-size:12px;margin-left:auto;font-family:var(--mono);text-align:right}
+
+  ol,ul{margin:12px 0;padding-left:22px}
+  li{margin:7px 0;color:#3d444b}
+  li b{color:#000}
+  .warn{border-left:3px solid var(--accent);background:var(--card);padding:14px 18px;
+    border-radius:0 8px 8px 0;color:#3d444b;font-size:14px;margin:16px 0}
+  .quote{background:var(--accent-weak);border-radius:12px;padding:18px 22px;margin:18px 0;
+    color:#124a9e;font-size:14.5px;line-height:1.9}
+  footer{color:var(--muted);font-size:12.5px;text-align:center;padding-top:32px}
+
+  @media (max-width:760px){
+    .hero{grid-template-columns:1fr;gap:26px;padding:40px 0 34px}
+    .hero img{width:150px;height:150px;border-radius:34px}
+    h1{font-size:30px}
+    .cards,.idea{grid-template-columns:1fr}
+    .wrap{padding:0 20px 60px}
+    .top-in{padding:12px 20px}
+    .top-in span{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <img src="logo-icon.svg" alt="">
+    <b>留个点 · Logo 与设计理念（第二版）</b>
+    <span>BRAND · V2</span>
+    <a href="../logo-spec.html">看第一版</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <img src="logo-icon.svg" alt="留个点 蓝底图标">
+    <div>
+      <div class="kick">BRAND &amp; LOGO · V2</div>
+      <h1>留个点 · 第二版</h1>
+      <div class="tag">A DOT, A WORD</div>
+      <p class="lead">第一版是「一条线 + 一个点」的线条稿；这一版反过来——实心、双色、不描边、不用渐变，把产品的动作直接画出来：留下一句话，钉在这个点上。</p>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <section>
+    <h2>名字：留个点</h2>
+    <p class="sub">不是名词，是一句随口说的话——像朋友告诉你「那家店不错，留个点」。</p>
+    <div class="quote">
+      <b>留</b> = 收藏下来；<b>个点</b> = 地图上的那个位置。<br>
+      合起来是一句日常话，也正好是产品的两个动作：<b>留个点，说句话。</b>
+    </div>
+    <table>
+      <tr><th>项</th><th>内容</th></tr>
+      <tr><td><b>中文名</b></td><td>留个点</td></tr>
+      <tr><td><b>英文</b></td><td>A DOT, A WORD</td></tr>
+      <tr><td><b>一句话</b></td><td>留个点，说句话。</td></tr>
+      <tr><td><b>语感</b></td><td>口语、轻、像自己对自己说话；不端着，不像工具软件</td></tr>
+    </table>
+  </section>
+
+  <!-- 2 -->
+  <section>
+    <h2>设计理念</h2>
+    <p class="sub">这一版不玩线条，用「实心色块 + 一句话」直说产品在干什么。</p>
+    <div class="idea">
+      <div>
+        <b>01 · 一个气泡，就是那句备注</b>
+        <p>收藏地点这件事，最后落脚的其实是你写的那句话。所以主体不是地图，而是一个装着话的气泡。</p>
+      </div>
+      <div>
+        <b>02 · 气泡的尾巴，是地图针的针脚</b>
+        <p>尾巴放在正下方、收成一个尖，既像气泡的出口，也像地图针扎下去的那一戳——一个形状读两种意思，不额外加元素。</p>
+      </div>
+      <div>
+        <b>03 · 中间那道横线，是还没写完的句子</b>
+        <p>只有一条线，不写满：备注本来就是一句话、半句话，不是文章。线用圆头，收得干净。</p>
+      </div>
+      <div>
+        <b>04 · 实心、双色、零渐变</b>
+        <p>和第一版的细线条正相反：粗、实、只在蓝白之间切换。缩到 16px 不掉细节，印在贴纸上也够分量。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section>
+    <h2>图形构成</h2>
+    <p class="sub">图标画布 512 × 512，两个色块：底板、气泡（含尾巴）；气泡里挖掉一道横线。</p>
+    <table>
+      <tr><th>元素</th><th>参数</th></tr>
+      <tr><td><b>底板</b></td><td><code>rect 512 × 512</code>，圆角 <code>rx = 112</code>（= 边长 21.875%）</td></tr>
+      <tr><td><b>气泡</b></td><td><code>rect x116 y104 w280 h224</code>，圆角 <code>rx 76</code>，<code>fill:#fff</code></td></tr>
+      <tr><td><b>尾巴</b></td><td><code>M208 314 L246 394 Q256 410 266 394 L304 314 Z</code>，圆角靠 <code>Q</code> 收尖；根部藏进气泡底边</td></tr>
+      <tr><td><b>横线</b></td><td><code>M184 216 H328</code> · <code>stroke-width:28</code> · <code>linecap:round</code> · 颜色 = 底板色（挖空）</td></tr>
+      <tr><td><b>配色</b></td><td>只有两色：底板 <code>#1677ff</code>、气泡 <code>#ffffff</code>，无渐变、无描边、无投影</td></tr>
+    </table>
+  </section>
+
+  <!-- 4 -->
+  <section>
+    <h2>三版图标</h2>
+    <p class="sub">同一个形状，三种底色：蓝底（主用）、墨底（深色场景）、浅底（浅色页面）。</p>
+    <div class="cards">
+      <div class="card">
+        <img src="logo-icon.svg" alt="蓝底图标">
+        <b>蓝底版 · logo-icon.svg</b>
+        <p>底 <code>#1677ff</code>　气泡 <code>#ffffff</code><br>横线 = 底蓝色（挖空）</p>
+      </div>
+      <div class="card">
+        <img src="logo-icon-ink.svg" alt="墨底图标">
+        <b>墨底版 · logo-icon-ink.svg</b>
+        <p>底 <code>#14181d</code>　气泡 <code>#ffffff</code><br>深色页面或深色桌面壁纸</p>
+      </div>
+    </div>
+    <div class="cards" style="margin-top:16px">
+      <div class="card">
+        <img src="logo-icon-light.svg" alt="浅底图标">
+        <b>浅底版 · logo-icon-light.svg</b>
+        <p>底 <code>#f5f6f7</code>　气泡 <code>#1677ff</code><br>横线 = 白色（挖空）</p>
+      </div>
+      <div class="card" style="background:#e9eef5">
+        <img src="logo-icon.svg" alt="蓝底图标（深色演示）">
+        <b>缩到 16px 仍是「气泡 + 一横」</b>
+        <p>没有细线，只有块面，小尺寸最稳</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section>
+    <h2>横版标准组合</h2>
+    <p class="sub">420 × 200 画布。蓝色方块 152 × 152（rx 33），图标按 0.296875 倍缩放。</p>
+    <div class="locks">
+      <div class="lock">
+        <img src="logo-lockup-dark.svg" alt="横版组合（深色文字，浅底）">
+        <div class="cap">深色文字版 · 用于浅底</div>
+      </div>
+      <div class="lock dark">
+        <img src="logo-lockup-light.svg" alt="横版组合（浅色文字，深底）">
+        <div class="cap">浅色文字版 · 用于深底</div>
+      </div>
+    </div>
+    <table>
+      <tr><th>元素</th><th>参数</th></tr>
+      <tr><td><b>中文「留个点」</b></td><td><code>x196 y108</code> · 字号 <code>62</code> · 字重 <code>700</code> · 字距 <code>2</code><br>字体 <code>PingFang SC → Hiragino Sans GB → Microsoft YaHei</code></td></tr>
+      <tr><td><b>英文「A DOT, A WORD」</b></td><td><code>x199 y146</code> · 字号 <code>14.5</code> · 字重 <code>600</code> · 字距 <code>5</code><br>字体 <code>Helvetica Neue → Arial</code></td></tr>
+      <tr><td><b>文字颜色</b></td><td>浅底版：中文 <code>#1c1f23</code> / 英文 <code>#8a9099</code><br>深底版：中文 <code>#e6edf3</code> / 英文 <code>#8b949e</code></td></tr>
+      <tr><td><b>蓝色方块</b></td><td><code>x16 y24 · 152 × 152 · rx 33</code>，<code>fill:#1677ff</code></td></tr>
+    </table>
+  </section>
+
+  <!-- 6 -->
+  <section>
+    <h2>品牌色板</h2>
+    <p class="sub">比第一版更省：主色只有一个蓝，其余全是中性色。</p>
+    <div class="colors">
+      <div class="c"><div class="sw" style="background:#1677ff"></div><div class="meta"><b>主蓝</b>#1677ff<br>底板 / 按钮 / 链接</div></div>
+      <div class="c"><div class="sw" style="background:#ffffff;border-bottom:1px solid #e6e9ee"></div><div class="meta"><b>纯白</b>#ffffff<br>气泡 / 深底文字</div></div>
+      <div class="c"><div class="sw" style="background:#14181d"></div><div class="meta"><b>墨色</b>#14181d<br>深色底板 / 正文</div></div>
+      <div class="c"><div class="sw" style="background:#f5f6f7;border-bottom:1px solid #e6e9ee"></div><div class="meta"><b>浅灰白</b>#f5f6f7<br>页面底色 / 浅底图标</div></div>
+      <div class="c"><div class="sw" style="background:#8a9099"></div><div class="meta"><b>灰字</b>#8a9099<br>英文副标 / 辅助文字</div></div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section>
+    <h2>尺寸与留白</h2>
+    <p class="sub">最小 16 × 16；圆角随尺寸等比缩放，四周留白 ≥ 边长 1/8。</p>
+    <div class="sizes">
+      <div class="sz"><img src="logo-icon.svg" width="128" height="128" alt="128px 图标"><span>128</span></div>
+      <div class="sz"><img src="logo-icon.svg" width="64" height="64" alt="64px 图标"><span>64</span></div>
+      <div class="sz"><img src="logo-icon.svg" width="32" height="32" alt="32px 图标"><span>32</span></div>
+      <div class="sz"><img src="logo-icon.svg" width="16" height="16" alt="16px 图标"><span>16</span></div>
+    </div>
+    <ul>
+      <li>圆角公式：<code>圆角 = 边长 × 0.219</code></li>
+      <li>标签页 / 桌面图标用 <code>logo-icon.svg</code>（自带蓝底，任何背景上都成立）</li>
+      <li>深色页面用 <code>logo-icon-ink.svg</code>，浅色页面用 <code>logo-icon-light.svg</code></li>
+    </ul>
+  </section>
+
+  <!-- 8 -->
+  <section>
+    <h2>文件清单</h2>
+    <div class="files">
+      <a class="file" href="logo-icon.svg">蓝底图标（主图标）<span>logo-icon.svg</span></a>
+      <a class="file" href="logo-icon-ink.svg">墨底图标<span>logo-icon-ink.svg</span></a>
+      <a class="file" href="logo-icon-light.svg">浅底图标<span>logo-icon-light.svg</span></a>
+      <a class="file" href="logo-lockup-dark.svg">横版组合（深色文字，用于浅底）<span>logo-lockup-dark.svg</span></a>
+      <a class="file" href="logo-lockup-light.svg">横版组合（浅色文字，用于深底）<span>logo-lockup-light.svg</span></a>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section>
+    <h2>禁止用法</h2>
+    <div class="warn">以下几条是硬约束，改图时别踩。</div>
+    <ul>
+      <li>不要拉伸变形（保持 1:1，圆角等比）</li>
+      <li>不要把气泡尾巴挪到左下角——那是聊天软件，不是地图针</li>
+      <li>不要在气泡里加第二道横线或加圆点（一横 = 一句话，多了就变信息列表）</li>
+      <li>不要给气泡加描边、投影、渐变或玻璃质感（这版就是纯色块）</li>
+      <li>不要把「留个点」三个字拆行、改字重或缩成「留点」</li>
+    </ul>
+  </section>
+
+  <!-- 10 -->
+  <section>
+    <h2>两版怎么选</h2>
+    <table>
+      <tr><th></th><th>第一版 · 点记</th><th>第二版 · 留个点</th></tr>
+      <tr><td><b>画法</b></td><td>一条折线 + 一个点，细线条</td><td>实心气泡 + 一道横线，块面</td></tr>
+      <tr><td><b>气质</b></td><td>克制、安静、像手绘本子</td><td>直接、轻快、更像一个 App</td></tr>
+      <tr><td><b>16px 表现</b></td><td>靠线条，缩到极小会变细</td><td>靠块面，小尺寸最稳</td></tr>
+      <tr><td><b>含义</b></td><td>地图 + 你标下的那个点</td><td>地点 + 你写的那句话</td></tr>
+      <tr><td><b>更适合</b></td><td>放在页面里当安静的小标记</td><td>当桌面图标、顶栏品牌位、发出去让人记住</td></tr>
+    </table>
+    <p class="sub" style="margin-top:18px">两版都用同一个主蓝 <code>#1677ff</code>，可以只选其一，不会和页面主题打架。</p>
+  </section>
+
+  <section>
+    <h2>已接入页面</h2>
+    <p class="sub">v0.7.5 起已采用本版，改动如下：</p>
+    <ol>
+      <li><code>web/assets/img/logo.svg</code>：本版蓝底图标的页面副本（favicon 与顶栏共用）</li>
+      <li><code>web/index.html</code>：页面标题「留个点 · 地点笔记」、<code>theme-color #1677ff</code>、<code>rel="icon"</code> 指向 <code>assets/img/logo.svg</code></li>
+      <li><code>web/index.html</code> 顶栏：搜索框左侧品牌位，46 × 46（<code>.mn-brand</code>）</li>
+      <li><code>web/admin.html</code>：标题「留个点 · 同步」，页头 <code>h1</code> 加 24px 小图标</li>
+    </ol>
+    <p class="sub" style="margin-top:14px">改图标时记得同步 <code>web/assets/img/logo.svg</code> 与本目录三张 SVG。</p>
+  </section>
+
+  <footer>留个点 · 品牌与 Logo（第二版）· 数值来源：brand/v2/*.svg 实际代码</footer>
+</div>
+
+</body>
+</html>

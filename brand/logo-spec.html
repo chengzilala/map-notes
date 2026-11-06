@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>点记 · Logo 与设计理念</title>
+<style>
+  :root{
+    --bg:#f5f6f7;--card:#ffffff;--text:#1c1f23;--muted:#8a9099;--line:#eceef1;
+    --accent:#1677ff;--accent-weak:#e9f1ff;--ink:#14181d;
+    --mono:ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+    line-height:1.8;font-size:15px;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px 90px}
+  header.top{
+    position:sticky;top:0;z-index:5;backdrop-filter:blur(12px);
+    background:rgba(245,246,247,.88);border-bottom:1px solid var(--line);
+  }
+  .top-in{max-width:1000px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:12px}
+  .top-in img{width:34px;height:34px;border-radius:9px;display:block}
+  .top-in b{font-size:15px;letter-spacing:.5px}
+  .top-in span{color:var(--muted);font-size:12px;letter-spacing:2px;margin-left:auto}
+  .top-in a{color:var(--muted);font-size:12.5px;text-decoration:none;border:1px solid var(--line);
+    background:var(--card);padding:5px 11px;border-radius:6px}
+  .top-in a:hover{color:#fff;background:var(--accent);border-color:var(--accent)}
+
+  .hero{display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:center;padding:60px 0 46px}
+  .hero img{width:200px;height:200px;display:block;border-radius:44px;box-shadow:0 18px 44px rgba(22,119,255,.18)}
+  .kick{color:var(--accent);font-size:11.5px;letter-spacing:3px;font-weight:600;margin:0 0 12px}
+  h1{margin:0;font-size:38px;line-height:1.15;letter-spacing:2px}
+  .tag{color:var(--muted);font-size:12px;letter-spacing:5px;margin-top:12px}
+  .lead{color:#4a5158;font-size:14.5px;line-height:1.9;margin:20px 0 0;max-width:580px}
+
+  section{padding:38px 0;border-top:1px solid var(--line)}
+  h2{margin:0 0 6px;font-size:19px;letter-spacing:.5px;display:flex;align-items:center;gap:9px}
+  h2::before{content:"";width:3px;height:16px;border-radius:2px;background:var(--accent)}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 24px}
+  h3{margin:30px 0 10px;font-size:15.5px;letter-spacing:.4px}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0 6px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-size:12.5px;letter-spacing:.06em;font-weight:600;border-bottom:1px solid #dde1e6}
+  td b{color:#000;font-weight:600}
+  tr:hover td{background:rgba(22,119,255,.04)}
+  code{font-family:var(--mono);font-size:12.8px;background:#eef1f5;border:1px solid var(--line);
+    border-radius:5px;padding:1px 5px;word-break:break-all}
+
+  .idea{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 4px}
+  .idea div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .idea b{display:block;font-size:14px;margin-bottom:6px}
+  .idea p{margin:0;color:#4a5158;font-size:13.5px;line-height:1.85}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+  .card img{width:120px;height:120px;display:block;margin:0 auto;border-radius:26px}
+  .card b{display:block;margin-top:16px;font-size:13.5px}
+  .card p{margin:4px 0 0;color:var(--muted);font-size:12.5px;line-height:1.7}
+
+  .locks{display:grid;gap:16px}
+  .lock{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px}
+  .lock.dark{background:var(--ink);border-color:#242b33}
+  .lock img{width:100%;max-width:420px;height:auto;display:block}
+  .lock .cap{font-size:12px;color:var(--muted);margin-top:12px}
+
+  .sizes{display:flex;align-items:flex-end;gap:34px;flex-wrap:wrap;background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:26px}
+  .sz{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--muted);
+    font-size:11.5px;letter-spacing:1px}
+  .sz img{display:block}
+
+  .colors{display:flex;gap:14px;flex-wrap:wrap}
+  .c{flex:1;min-width:130px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+  .c .sw{height:74px}
+  .c .meta{padding:11px 13px;font-size:11.5px;line-height:1.7;color:var(--muted)}
+  .c .meta b{display:block;font-size:12.5px;color:var(--text);letter-spacing:.5px;margin-bottom:2px}
+
+  .files{display:grid;gap:9px}
+  .file{display:flex;align-items:center;gap:12px;padding:12px 15px;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;font-size:13.5px;text-decoration:none;color:var(--text)}
+  .file:hover{border-color:var(--accent)}
+  .file span{color:var(--muted);font-size:12px;margin-left:auto;font-family:var(--mono);text-align:right}
+
+  ol,ul{margin:12px 0;padding-left:22px}
+  li{margin:7px 0;color:#3d444b}
+  li b{color:#000}
+  .warn{border-left:3px solid var(--accent);background:var(--card);padding:14px 18px;
+    border-radius:0 8px 8px 0;color:#3d444b;font-size:14px;margin:16px 0}
+  .quote{background:var(--accent-weak);border-radius:12px;padding:18px 22px;margin:18px 0;
+    color:#124a9e;font-size:14.5px;line-height:1.9}
+  footer{color:var(--muted);font-size:12.5px;text-align:center;padding-top:32px}
+
+  @media (max-width:760px){
+    .hero{grid-template-columns:1fr;gap:26px;padding:40px 0 34px}
+    .hero img{width:150px;height:150px;border-radius:34px}
+    h1{font-size:30px}
+    .cards,.idea{grid-template-columns:1fr}
+    .wrap{padding:0 20px 60px}
+    .top-in{padding:12px 20px}
+    .top-in span{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <img src="logo-chip.svg" alt="">
+    <b>点记 · Logo 与设计理念</b>
+    <span>BRAND SPEC</span>
+    <a href="logo-icon.svg">看主图标</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <img src="logo-icon.svg" alt="点记 深色图标">
+    <div>
+      <div class="kick">BRAND &amp; LOGO</div>
+      <h1>点记 · 品牌与 Logo</h1>
+      <div class="tag">PIN &amp; NOTE</div>
+      <p class="lead">给这个「收藏地点 + 写备注」的小工具起的名字和标记。全部用简笔线条画成：一条折线、一个点，没有阴影、没有渐变高光之外的任何修饰。</p>
+      <p class="lead" style="color:#8a9099">第一版为备选方案，最终采用的是第二版「留个点」：<a href="v2/logo-spec.html" style="color:#1677ff">brand/v2/logo-spec.html</a>。</p>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <section>
+    <h2>名字：点记</h2>
+    <p class="sub">两个字，把产品做的两件事各说一遍。</p>
+    <div class="quote">
+      <b>点</b> = 地图上的那个地点；<b>记</b> = 你给它写的那段话。<br>
+      「点记」念起来又像 <b>惦记</b>——放在心上、还会再去的地方。
+    </div>
+    <table>
+      <tr><th>项</th><th>内容</th></tr>
+      <tr><td><b>中文名</b></td><td>点记（diǎn jì）</td></tr>
+      <tr><td><b>英文</b></td><td>PIN &amp; NOTE</td></tr>
+      <tr><td><b>一句话</b></td><td>惦记的地方，都记在这儿。</td></tr>
+      <tr><td><b>不叫</b></td><td>地图笔记 / 地点收藏 / My Places —— 太像功能名，不像自己的东西</td></tr>
+    </table>
+  </section>
+
+  <!-- 2 -->
+  <section>
+    <h2>设计理念</h2>
+    <p class="sub">只画两笔：一条折线、一个点。所有决定都是为了「一眼看懂，且不像别人」。</p>
+    <div class="idea">
+      <div>
+        <b>01 · 折线是地图，不是曲线图</b>
+        <p>三段折线像一张被折起来的地图。不画水滴形地图针、不画放大镜、不画手机边框——这些每个地图 App 都在用，画了就等于没名字。</p>
+      </div>
+      <div>
+        <b>02 · 点落在折点上，不在末端</b>
+        <p>你收藏一个地方，通常是在路上顺手记下的，故事没结束。所以点停在中间那个折点上，而不是终点——后面还会有下一个点。</p>
+      </div>
+      <div>
+        <b>03 · 点比线粗一圈</b>
+        <p>视线最后会落在点上，正好和产品里的顺序一致：先看到「哪儿」，再读「写了什么」。点大一圈，16px 也还认得出。</p>
+      </div>
+      <div>
+        <b>04 · 圆头线帽，不出现锐角</b>
+        <p>线帽、线角和方块圆角全部用 round。简笔画的松弛感来自「圆」，一旦出现尖角，就变成流程图图标了。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section>
+    <h2>图形构成</h2>
+    <p class="sub">图标版画布 512 × 512，三个元素：底板、一条折线、一个圆点。</p>
+    <table>
+      <tr><th>元素</th><th>参数</th></tr>
+      <tr><td><b>底板</b></td><td><code>rect 512 × 512</code>，圆角 <code>rx = 112</code>（= 边长 21.875%）</td></tr>
+      <tr><td><b>折线</b></td><td><code>M104 292 L208 220 L312 292 L408 220</code><br><code>fill:none</code> · <code>stroke-width:46</code>（≈ 边长 9%）· <code>linecap/linejoin:round</code></td></tr>
+      <tr><td><b>圆点</b></td><td><code>cx 312 / cy 292 / r 34</code>，正好落在第二个折点上</td></tr>
+      <tr><td><b>渐变方向</b></td><td><code>x1 104 y1 292 → x2 408 y2 220</code>，从左下往右上走，和折线同向</td></tr>
+    </table>
+    <p class="sub" style="margin-top:18px">写文案时可以直接引用的三句：</p>
+    <ul>
+      <li><b>一条折线</b>：一张折起来的地图，也是一条走过的路。</li>
+      <li><b>一个点</b>：你亲手标下的那个地方。</li>
+      <li><b>圆头圆角</b>：像随手画在本子上的记号，不是画在屏幕上的按钮。</li>
+    </ul>
+  </section>
+
+  <!-- 4 -->
+  <section>
+    <h2>三版图标</h2>
+    <p class="sub">深色版用于深底，浅色版用于浅底，蓝底版用于顶栏这类需要自带对比的位置。三版线条完全一致，只换底色与配色。</p>
+    <div class="cards">
+      <div class="card">
+        <img src="logo-icon.svg" alt="深色版图标">
+        <b>深色版 · logo-icon.svg</b>
+        <p>底 <code>#14181d</code>　圆点 <code>#4f9dff</code><br>渐变 <code>#0b5cff → #1677ff(55%) → #4f9dff</code></p>
+      </div>
+      <div class="card">
+        <img src="logo-icon-light.svg" alt="浅色版图标">
+        <b>浅色版 · logo-icon-light.svg</b>
+        <p>底 <code>#f5f6f7</code>　圆点 <code>#0a4fd8</code><br>渐变 <code>#0a4fd8 → #1677ff(55%) → #3d8bff</code></p>
+      </div>
+    </div>
+
+    <h3>蓝底小图标 · logo-chip.svg</h3>
+    <div class="cards">
+      <div class="card">
+        <img src="logo-chip.svg" alt="蓝底小图标">
+        <b>顶栏 / 标签页 / 桌面图标</b>
+        <p>满版对角渐变 <code>#0b5cff → #4f9dff</code><br>线条与圆点 <code>#ffffff</code></p>
+      </div>
+      <div class="card" style="background:#e9eef5">
+        <img src="logo-chip.svg" alt="蓝底小图标（灰底演示）" style="background:#f5f6f7;border-radius:26px">
+        <b>任何页面底色都能用</b>
+        <p>自带蓝底，不依赖页面背景</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section>
+    <h2>横版标准组合</h2>
+    <p class="sub">420 × 200 画布。蓝色方块 152 × 152（rx 33），图标路径按 0.296875 倍缩放，线宽 13.66。</p>
+    <div class="locks">
+      <div class="lock">
+        <img src="logo-lockup-dark.svg" alt="横版组合（深色文字，浅底）">
+        <div class="cap">深色文字版 · 用于浅底</div>
+      </div>
+      <div class="lock dark">
+        <img src="logo-lockup-light.svg" alt="横版组合（浅色文字，深底）">
+        <div class="cap">浅色文字版 · 用于深底</div>
+      </div>
+    </div>
+    <table>
+      <tr><th>元素</th><th>参数</th></tr>
+      <tr><td><b>中文「点记」</b></td><td><code>x196 y108</code> · 字号 <code>62</code> · 字重 <code>700</code> · 字距 <code>2</code><br>字体 <code>PingFang SC → Hiragino Sans GB → Microsoft YaHei</code></td></tr>
+      <tr><td><b>英文「PIN &amp; NOTE」</b></td><td><code>x199 y146</code> · 字号 <code>14.5</code> · 字重 <code>600</code> · 字距 <code>5</code><br>字体 <code>Helvetica Neue → Arial</code></td></tr>
+      <tr><td><b>文字颜色</b></td><td>浅底版：中文 <code>#1c1f23</code> / 英文 <code>#8a9099</code><br>深底版：中文 <code>#e6edf3</code> / 英文 <code>#8b949e</code></td></tr>
+      <tr><td><b>蓝色方块</b></td><td><code>x16 y24 · 152 × 152 · rx 33</code>，渐变 <code>#0b5cff → #4f9dff</code></td></tr>
+    </table>
+  </section>
+
+  <!-- 6 -->
+  <section>
+    <h2>品牌色板</h2>
+    <p class="sub">不另起一套品牌色，直接沿用页面现有的主题色（<code>web/assets/css/style.css</code> 的 <code>:root</code>）。</p>
+    <div class="colors">
+      <div class="c"><div class="sw" style="background:#14181d"></div><div class="meta"><b>墨色</b>#14181d<br>深色底 / 图标底</div></div>
+      <div class="c"><div class="sw" style="background:#1677ff"></div><div class="meta"><b>主蓝</b>#1677ff<br>主色 / 按钮 / 链接</div></div>
+      <div class="c"><div class="sw" style="background:#0b5cff"></div><div class="meta"><b>深蓝</b>#0b5cff<br>渐变起点</div></div>
+      <div class="c"><div class="sw" style="background:#4f9dff"></div><div class="meta"><b>亮蓝</b>#4f9dff<br>渐变终点 / 深底上的点</div></div>
+      <div class="c"><div class="sw" style="background:#f5f6f7;border-bottom:1px solid #e6e9ee"></div><div class="meta"><b>浅灰白</b>#f5f6f7<br>页面底色 / 浅色图标底</div></div>
+      <div class="c"><div class="sw" style="background:#8a9099"></div><div class="meta"><b>灰字</b>#8a9099<br>英文副标 / 辅助文字</div></div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section>
+    <h2>尺寸与留白</h2>
+    <p class="sub">最小 16 × 16；圆角随尺寸等比缩放，四周留白 ≥ 边长 1/8。</p>
+    <div class="sizes">
+      <div class="sz"><img src="logo-icon.svg" width="128" height="128" alt="128px 图标"><span>128</span></div>
+      <div class="sz"><img src="logo-icon.svg" width="64" height="64" alt="64px 图标"><span>64</span></div>
+      <div class="sz"><img src="logo-icon.svg" width="32" height="32" alt="32px 图标"><span>32</span></div>
+      <div class="sz"><img src="logo-icon.svg" width="16" height="16" alt="16px 图标"><span>16</span></div>
+    </div>
+    <ul>
+      <li>圆角公式：<code>圆角 = 边长 × 0.219</code></li>
+      <li>标签页 / 桌面图标用 <code>logo-chip.svg</code>（有底色，缩到 16px 也不糊）</li>
+      <li>深色页面用 <code>logo-icon.svg</code>，浅色页面用 <code>logo-icon-light.svg</code></li>
+    </ul>
+  </section>
+
+  <!-- 8 -->
+  <section>
+    <h2>文件清单</h2>
+    <div class="files">
+      <a class="file" href="logo-icon.svg">深色底图标（主图标）<span>logo-icon.svg</span></a>
+      <a class="file" href="logo-icon-light.svg">浅色底图标<span>logo-icon-light.svg</span></a>
+      <a class="file" href="logo-chip.svg">蓝底小图标<span>logo-chip.svg</span></a>
+      <a class="file" href="logo-lockup-dark.svg">横版组合（深色文字，用于浅底）<span>logo-lockup-dark.svg</span></a>
+      <a class="file" href="logo-lockup-light.svg">横版组合（浅色文字，用于深底）<span>logo-lockup-light.svg</span></a>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section>
+    <h2>禁止用法</h2>
+    <div class="warn">以下几条是硬约束，改图时别踩。</div>
+    <ul>
+      <li>不要拉伸变形（保持 1:1，圆角等比）</li>
+      <li>不要把折线的圆头改成方头（方头会失去「随手画」的感觉）</li>
+      <li>不要给圆点换位置：它必须落在第二个折点上，挪到末端就变成另一个品牌（跑不快）的语法了</li>
+      <li>不要在蓝底上再叠蓝色线条（蓝底版线条固定 <code>#ffffff</code>）</li>
+      <li>不要把「点记」两个字拆行、改字重或加英文名缩写</li>
+      <li>不要给图标加投影 / 描边 / 外发光（品牌稿里没有这些效果）</li>
+    </ul>
+  </section>
+
+  <!-- 10 -->
+  <section>
+    <h2>还没接到页面上</h2>
+    <p class="sub">目前只产出设计稿，<code>web/</code> 尚未引用。要上线时按下面顺序接：</p>
+    <ol>
+      <li><code>web/index.html</code>、<code>web/admin.html</code> 顶栏加 <code>logo-chip.svg</code>（建议 24–28px）</li>
+      <li><code>&lt;link rel="icon"&gt;</code> 指向 <code>logo-chip.svg</code>，标签页与桌面图标统一</li>
+      <li>页面标题改成「点记 · 地点笔记」，<code>theme-color</code> 用 <code>#1677ff</code></li>
+      <li>改完回来同步本文档的「文件清单」与参数表</li>
+    </ol>
+  </section>
+
+  <footer>点记 · 品牌与 Logo · 数值来源：brand/*.svg 实际代码</footer>
+</div>
+
+</body>
+</html>

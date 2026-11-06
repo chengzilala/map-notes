@@ -1,0 +1,10 @@
+[Unit]
+Description=每小时检查一次 map-notes 到期用户并串行同步
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=600
+Persistent=true
+
+[Install]
+WantedBy=timers.target
