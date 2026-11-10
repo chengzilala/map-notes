@@ -88,6 +88,7 @@
   window.MNAuth = {
     boot: boot,
     getToken: getToken,
+    accountWeb: accountWeb,
     requireLogin: function () {
       return boot().then(function (result) {
         if (result.sdk) return result.sdk.requireLogin();
@@ -122,9 +123,9 @@
       }
       var name = user.nickname || '我的账户';
       el.classList.add('is-on');
-      el.title = name + ' · 打开我的账户';
-      el.setAttribute('aria-label', name + '，打开我的账户');
-      el.onclick = function () { location.href = accountWeb() + '/account.html'; };
+      el.title = name + ' · 打开我的收藏画像';
+      el.setAttribute('aria-label', name + '，打开我的收藏画像');
+      el.onclick = function () { location.href = 'stats.html'; };
     }).catch(function () { /* 账户接口不可用不打扰用户 */ });
   }
 

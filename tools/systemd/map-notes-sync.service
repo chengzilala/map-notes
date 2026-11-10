@@ -8,5 +8,7 @@ Type=oneshot
 User=ubuntu
 WorkingDirectory=/srv/chesterlee/map
 EnvironmentFile=/etc/map-notes/secrets.env
+# 自动同步间隔（小时）：调大更省请求、降低风险，调小更新更勤
+Environment=MN_SYNC_INTERVAL_HOURS=20
 ExecStart=/srv/chesterlee/map/.venv/bin/python /srv/chesterlee/map/tools/sync_worker.py
 TimeoutStartSec=3600

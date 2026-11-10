@@ -142,6 +142,25 @@
 - **修复**：① 静态页面请求会因 `data_uid()` 回退凭空造出 `local` 用户 → 改为只有已登录请求才 `touch_user`；② 旧数据迁移后 `users` 表没有本人 → `store.migrate_legacy` 里补 `touch_user(uid)`；已清理服务器上的空 `local` 行。
 - **待办**：把 30 个白名单 uid 填进 `MN_ALLOWED_UIDS`（或临时 `MN_ALLOW_ALL_USERS=1` 放开），再让白名单用户各自走「登录 → 扫码绑定 → 自动同步」。
 ---
+## 2026-11-06 会话条目：默认全部 + 搜索面板（Web v0.10.2，已上线）
+
+- **目标**：列表默认显示全部（不再默认 3 km 内）；搜索框聚焦时参考高德 App，给「距离快捷 / 历史搜索 / 经常去的地方」。
+- **已做**：`state.radiusOnly` 默认 `false`、`radiusBtn` 初始「全部」；新增 `state.radius` 支持 500m/1km/3km/5km/10km 快捷档；搜索框聚焦弹出 `#searchPanel`（距离 chips + 历史搜索 + 经常去的地方 + 完成）；历史存 `localStorage: mn-history`（8 条，可清空）；常去按 `localStorage: mn-visits` 详情打开次数排前 6；输入关键词、点完成或点面板外即收起；选中条目时若有关键词会自动记入历史。
+- **关键结论**：高德的「热门地标」是全网统计，本站没有该数据源，改为**自己的**「经常去的地方」（按打开详情次数），更贴合个人使用；距离档位与历史/常去都只存本机浏览器，不跨设备同步。
+- **验证**：`node --check` 通过；HTML 新增 id 全部存在、JS 函数齐全；已 rsync `web/` 上线，`index=200`、页面与脚本均含新结构。
+- **产出物**：`web/index.html`、`web/assets/js/app.js`、`web/assets/css/style.css`、`README.md`（v0.13.1）、`plan/RPD_需求文档.md`（v0.10.2）。
+- **待办**：真机各点一遍（聚焦搜索、500m/5km、历史清空、常去直达）；白名单 30 个 uid 仍待填。
+---
+## 2026-11-06 会话条目：距离筛选二合一（Web v0.10.3，已上线）
+
+- **目标**：抽屉头「全部 / N km 内」按钮与搜索面板里的「直线距离」快捷档重复，合并为**一个入口**。
+- **已做**：删除 `#searchPanel` 内的「直线距离 / #nearLabel / #distanceChips」，搜索框聚焦后只给历史搜索、经常去的地方、提示与「完成」；`#radiusBtn` 改为下拉开关，点开 `#radiusMenu`（两列 6 个档位：全部 / 500 m / 1 km / 3 km / 5 km / 10 km，当前档高亮），选中即改 `state.radius` + `radiusOnly` 并收起；未定位选非「全部」档提示先定位；点按钮外、点搜索框、点「完成」各自只关闭自己的浮层。
+- **关键结论**：距离是「对列表全局过滤」，天然属于抽屉头；搜索面板只放「找东西」的辅助（历史 / 常去），两处不再重复；下拉用两列小卡片，收起态 32dvh 也放得下，不遮地图。
+- **产出物**：`web/index.html`、`web/assets/js/app.js`、`web/assets/css/style.css`、`README.md`（v0.13.2）、`plan/RPD_需求文档.md`（v0.10.3）；已 rsync 到线上。
+- **验证**：`node --check` 通过；`distanceChips` / `nearLabel` 残留引用为 0；线上 `index=200`，首页含 `radiusMenu`、脚本含 `renderRadiusMenu`（2 处）且无 `distanceChips`。
+- **待办**：你在手机上点一遍「全部」按钮展开 / 选 500 m 或 5 km / 点外面收起；未定位时先看是否提示。
+- **风险/注意事项**：`#radiusMenu` 用绝对定位挂在 `.mn-sheet` 内，top 固定 58px；若以后改 `.mn-sheet-head` 高度，需要同步这个值。
+---
 
 ## 2026-11-04 会话条目：手机列表框支持上/下拉手势 v0.10.1（已完成）
 
@@ -160,6 +179,16 @@
 - **关键结论/决定**：① 只搬本项目用得上的经验，不引入 i18n / 埋点 / popup；② 商店文案统一「收藏只在本机读取、不上传」，与代码一致；③ 360 以创作者中心 `creative.360.com` 为准（crx 直传、图标 192、封面 472×296、推荐图 1120×700），旧开放平台只作参考；④ 隐私政策同时覆盖扩展与网站，扩展侧明确「当前备注仅存本机」。
 - **产出物**：`extension/manifest.json`、`extension/icons/*`、`extension/pack.py`、`tools/make_store_assets.py`、`site/privacy.html`、`site/index.html`、`plan/plan_store_上架总览.md`、`plan/plan_edge_store.md`、`plan/plan_360_store.md`、`plan/RPD_浏览器扩展.md`、`README.md`（v0.12.0）、`.gitignore`；生成物 `release/微软商店-上传/`、`release/360-素材/`、`release/map-notes-v0.2.0.zip`。
 - **待办**：① **拍 4–6 张真实截图** 放 `screenshots/store/store-*.png`（1280×800），重跑素材脚本自动入槽；② 隐私页同步上线：`rsync -az --delete site/ ubuntu@43.136.92.125:/srv/chesterlee/map/site/`，无痕确认 URL 200；③ 提交前把 `plan/RPD_浏览器扩展.md` 里搜索 / 距离 / 双源三项验收跑完；④ 登录 Partner Center 新建扩展提交；⑤ 360 先实测 MV3，再打 crx（`.pem` 存仓库外）提交。
-- **风险/注意事项**：审核员没有你的地图账号，只能看到入口与空态——审核备注已写明「无需账号可验证 UI，登录自己账号可看自己的收藏」，不要提供他人账号；360 的 `.crx` 必须复用 `.pem`，否则应用 ID 变化等于重新上架；`release/` 已整体不入库，素材由脚本可重建。
+- **风险/注意事项**：审核员没有你的地图账号，只能看到入口与空态——审核备注已写明「无需账号验证 UI，登录自己账号可看自己的收藏」，不要提供他人账号；360 的 `.crx` 必须复用 `.pem`，否则应用 ID 变化等于重新上架；`release/` 已整体不入库，素材由脚本可重建。
+---
+## 2026-11-06 会话条目：我的 · 收藏画像（Web v0.11.0）
+
+- **目标**：回答「数据存哪 / 是否每次实时抓 / 要不要服务器」，并把收藏数据做成一个独立分析栏目：入口复用首页右上头像，进去先显示统一账户，其余统计都在这一页。
+- **已做**：① 新增 `web/stats.html` + `assets/css/stats.css` + `assets/js/stats.js`（约 900 行），纯前端读 `/api/favorites` + `/api/notes` + `/api/status` 单次遍历聚合；② 首页 `account.js` 头像点击由「账户中心」改为 `location.href='stats.html'`，并导出 `accountWeb` 供页面内按钮复用；③ 页面模块：账户卡（头像 / 昵称 / 邮箱掩码 / 新鲜度）、KPI 四格、年度 + 近 12 个月时间线、城市足迹、收藏类型、来源环形图、常用标签、收藏范围（跨度 / P50·P80 / 最远两点 / 区县 Top8）、备注画像、趣味事实、免责声明；④ 城市 / 区县解析只认地址开头的「X市 / X自治州 / X地区 / X盟」，加黑名单排除「超市 / 市场 / 夜市 / 股市」等误判；⑤ 401/403 显示登录墙，无数据显示空状态；⑥ README 升 v0.14.0、RPD 升 v0.11.0 并补 `### M8` 详细需求。
+- **关键结论/决定**：统计**不上服务器、不新增接口**——数据本来就在 `web/data/map-notes.db`，浏览器读三个已有接口即可，符合项目「不做导出 / 不上传」边界；明确「收藏 ≠ 到访」，不做行程或到访报告；手机窄屏单列、宽屏两列。
+- **验证**：`node --check` 通过；本机 `serve.py --port 8950` 实测 `/api/favorites` 200、513 条、`syncedAt=2026-11-04T13:40:44+08:00`；真实 Chrome 截图核对：账户卡显示「本地账户 / 未连接统一账户 · 2 天前更新」，KPI 513 / 0% / 31 / 4 年，年度条形 2022:1、2023:23、2024:99、2025:135、2026:255，月度柱状正常。
+- **产出物**：`web/stats.html`、`web/assets/css/stats.css`、`web/assets/js/stats.js`、`web/assets/js/account.js`、`README.md`（v0.14.0）、`plan/RPD_需求文档.md`（v0.11.0）。
+- **待办**：① 上线 `web/` 三件套（`rsync`），线上确认头像进 `stats.html` 正常；② 备注还是 0 条，写几条后再看「备注画像」效果；③ 手机上过一遍窄屏排版。
+- **风险/注意事项**：本地预览会被 `ps-auth.js` 静默 SSO 跳到账户中心 `sso.html`，调试时先用 `localStorage.ps_sso_off=1` 关掉；城市解析依赖地址文本，个别只有「XX路」没有城市字段的条目会落在「未知」。
 ---
 

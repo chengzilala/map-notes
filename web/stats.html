@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1677ff">
+  <title>我的 · 收藏画像｜留个点</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg">
+  <link rel="stylesheet" href="assets/css/stats.css">
+</head>
+<body>
+  <header class="st-top">
+    <a class="st-back" href="./" aria-label="返回地图" title="返回地图"><img src="assets/img/logo.svg" alt="留个点" width="22" height="22"></a>
+    <div class="st-head">
+      <h1>我的 · 收藏画像</h1>
+      <p>从收藏过的地方，看看你的生活半径</p>
+    </div>
+  </header>
+
+  <main class="st-main" id="statsMain" hidden>
+    <section class="st-account" id="accountCard" aria-label="统一账户"></section>
+
+    <section class="st-card" id="syncCard" hidden aria-label="收藏同步">
+      <div class="st-card-head">
+        <h2>收藏同步</h2>
+      </div>
+      <div class="st-facts" id="syncFacts"></div>
+      <p class="st-sync-error" id="syncError" hidden></p>
+      <div class="st-sync-actions">
+        <button id="syncBtn" type="button">立即同步收藏</button>
+        <a class="st-sync-relogin" id="syncRelogin" href="/admin" hidden>去重新扫码</a>
+        <span class="st-sync-msg" id="syncMsg"></span>
+      </div>
+      <p class="st-footnote">每天自动同步一次；点「立即同步」约 20–60 秒完成，完成后本页数据会自动刷新。登录态失效时，请到「同步」页（<a href="/admin">/admin</a>）扫码。</p>
+    </section>
+
+    <p class="st-lede" id="lede"></p>
+
+    <section class="st-kpis" id="kpis" aria-label="核心数字"></section>
+
+    <section class="st-card">
+      <div class="st-card-head">
+        <h2>收藏时间线</h2>
+        <span id="timelineHint"></span>
+      </div>
+      <div class="st-years" id="yearBars"></div>
+      <div class="st-months" id="monthBars"></div>
+      <p class="st-footnote" id="rhythm"></p>
+    </section>
+
+    <div class="st-grid">
+      <section class="st-card">
+        <div class="st-card-head">
+          <h2>城市足迹</h2>
+          <span id="cityHint"></span>
+        </div>
+        <div id="cityBars"></div>
+        <p class="st-footnote" id="cityNote"></p>
+      </section>
+
+      <section class="st-card">
+        <div class="st-card-head">
+          <h2>收藏类型</h2>
+          <span id="categoryHint"></span>
+        </div>
+        <div id="categoryBars"></div>
+        <p class="st-footnote" id="categoryNote"></p>
+      </section>
+    </div>
+
+    <div class="st-grid">
+      <section class="st-card">
+        <div class="st-card-head">
+          <h2>来源构成</h2>
+          <span id="sourceHint"></span>
+        </div>
+        <div class="st-source">
+          <div class="st-donut" id="sourceDonut"><span id="sourceTotal"></span></div>
+          <div class="st-legend" id="sourceLegend"></div>
+        </div>
+        <p class="st-footnote" id="sourceNote"></p>
+      </section>
+
+      <section class="st-card">
+        <div class="st-card-head">
+          <h2>常用标签</h2>
+          <span id="tagHint"></span>
+        </div>
+        <div id="tagBars"></div>
+        <p class="st-footnote" id="tagNote"></p>
+      </section>
+    </div>
+
+    <section class="st-card">
+      <div class="st-card-head">
+        <h2>收藏范围</h2>
+        <span id="regionHint"></span>
+      </div>
+      <div class="st-facts" id="regionFacts"></div>
+      <div id="districtBars"></div>
+      <p class="st-footnote" id="regionNote"></p>
+    </section>
+
+    <section class="st-card">
+      <div class="st-card-head">
+        <h2>备注画像</h2>
+        <span id="noteHint"></span>
+      </div>
+      <div class="st-facts" id="noteFacts"></div>
+      <div class="st-longnotes" id="longNotes"></div>
+      <p class="st-footnote" id="noteNote"></p>
+    </section>
+
+    <section class="st-card">
+      <div class="st-card-head">
+        <h2>一些有趣的事实</h2>
+      </div>
+      <div class="st-facts" id="funFacts"></div>
+    </section>
+
+    <p class="st-disclaimer">
+      统计只基于你已收藏的地点，<strong>不代表实际到访</strong>；城市与类型来自地图标签和地址文字，可能存在识别误差。
+    </p>
+  </main>
+
+  <div class="st-state" id="loading">正在读取你的收藏…</div>
+  <div class="st-state" id="empty" hidden></div>
+
+  <div class="st-lock" id="loginWall" hidden>
+    <div class="st-lock-card">
+      <img src="assets/img/logo.svg" alt="留个点" width="56" height="56">
+      <h2>登录后查看</h2>
+      <p>收藏画像只对本人账户开放。</p>
+      <button id="loginWallBtn" type="button">登录统一账户</button>
+    </div>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/account.js"></script>
+  <script src="assets/js/stats.js"></script>
+</body>
+</html>

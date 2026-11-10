@@ -142,6 +142,36 @@ def source_error_text(statuses, names):
     return "；".join(parts)
 
 
+AUTH_ERROR_HINTS = ("登录态", "登录", "扫码", "未登录")
+
+
+def mark_login_states(uid, statuses):
+    """把同步结果回写到登录状态文件，避免 /admin 一直显示旧的「有效」。
+
+    - 来源同步成功 → 标记「有效」，刷新检查时间；
+    - 没配置登录态 → 标记「未登录」；
+    - 失败原因指向登录态 → 标记「已过期」，提醒用户重新扫码。
+    """
+    for name in SOURCE_LABELS:
+        meta = (statuses or {}).get(name) or {}
+        status = meta.get("status")
+        error = str(meta.get("error") or "")
+        if status == "ok":
+            state, message = "ok", None
+        elif status == "not_configured":
+            state, message = "unknown", error or "还没有登录"
+        elif status == "error" and any(hint in error for hint in AUTH_ERROR_HINTS):
+            state, message = "expired", error or "登录态可能已过期，请重新扫码登录"
+        else:
+            continue
+        path = paths.login_status(uid, name)
+        data = read_json(path)
+        data["state"] = state
+        data["checkedAt"] = now_iso()
+        data["error"] = message
+        write_json(path, data)
+
+
 def main():
     parser = argparse.ArgumentParser(description="服务器端同步某个用户的收藏")
     parser.add_argument("--uid", default=paths.default_uid(), help="同步哪个用户（默认 %(default)s）")
@@ -170,11 +200,13 @@ def main():
         report(False, "同步异常：%s" % exc, uid=uid)
         return 1
 
-    if output is None:
+    statuses = (output or {}).get("sources") or {}
+    mark_login_states(uid, statuses)
+
+    if not output or output.get("written") is False:
         report(False, "所有来源都没有可用数据，保留旧文件", uid=uid)
         return 2
 
-    statuses = output.get("sources") or {}
     ok_names = [name for name in SOURCE_LABELS if (statuses.get(name) or {}).get("status") == "ok"]
     failed_names = [
         name for name in SOURCE_LABELS

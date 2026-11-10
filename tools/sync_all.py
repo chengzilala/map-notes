@@ -260,7 +260,14 @@ def run(selected=None, headless=True, timeout=120, force=False, channel=None, ui
     merged = merge_sources(groups)
     if not merged:
         log("所有来源都没有数据，保留旧文件不动")
-        return None, 2
+        return {
+            "schemaVersion": 2,
+            "syncedAt": now_iso(),
+            "count": 0,
+            "sources": statuses,
+            "items": [],
+            "written": False,
+        }, 2
 
     merged_count = sum(len(groups.get(name) or []) for name in SOURCE_ORDER)
     merged_pairs = merged_count - len(merged)

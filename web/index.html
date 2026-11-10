@@ -27,6 +27,22 @@
         <button id="locateBtn" class="mn-locate" type="button" title="定位我">◎</button>
       </div>
     </div>
+    <div class="mn-search-panel" id="searchPanel" hidden>
+      <div class="mn-panel-sec" id="historySec" hidden>
+        <p class="mn-panel-title">历史搜索
+          <button id="clearHistory" class="mn-panel-link" type="button">清空</button>
+        </p>
+        <div class="mn-chips" id="historyChips"></div>
+      </div>
+      <div class="mn-panel-sec" id="frequentSec" hidden>
+        <p class="mn-panel-title">经常去的地方</p>
+        <ul class="mn-freq" id="frequentList"></ul>
+      </div>
+      <p class="mn-panel-hint" id="panelHint" hidden>输入名称 / 地址 / 备注 / 标签试试</p>
+      <div class="mn-panel-foot">
+        <button id="searchDone" type="button">完成</button>
+      </div>
+    </div>
     <div class="mn-filter" id="sourceFilter" hidden></div>
     <div class="mn-meta">
       <span id="metaSync">正在读取数据…</span>
@@ -40,11 +56,12 @@
       <div class="mn-sheet-title">
         <span id="listCount">—</span>
         <span class="mn-sheet-actions">
-          <button id="radiusBtn" class="mn-radius" type="button">3 km 内</button>
+          <button id="radiusBtn" class="mn-radius is-off" type="button" aria-haspopup="true" aria-expanded="false">全部</button>
           <button id="sourceBtn" class="mn-radius" type="button" hidden>来源设置</button>
         </span>
       </div>
     </div>
+    <div class="mn-radius-menu" id="radiusMenu" hidden></div>
     <div class="mn-source-settings" id="sourceSettings" hidden></div>
     <ul id="list" class="mn-list"></ul>
     <div id="empty" class="mn-empty" hidden></div>

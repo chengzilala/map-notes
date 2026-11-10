@@ -9,6 +9,17 @@
   var SOURCE_NAMES = { amap: '高德', baidu: '百度' };
   var SOURCE_ORDER = ['amap', 'baidu'];
   var DISPLAY_KEY = 'mn-display';
+  var HISTORY_KEY = 'mn-history';
+  var VISITS_KEY = 'mn-visits';
+  var HISTORY_LIMIT = 8;
+  var DISTANCE_OPTIONS = [
+    { value: 0, label: '全部' },
+    { value: 500, label: '500 m 内' },
+    { value: 1000, label: '1 km 内' },
+    { value: 3000, label: '3 km 内' },
+    { value: 5000, label: '5 km 内' },
+    { value: 10000, label: '10 km 内' }
+  ];
 
   // 默认视角对齐高德 App 打开时（200 米比例）；点定位后对齐「我的位置」（25 米比例）
   // 注：曾用「容器放大 2 倍 + scale(0.5)」超采样提升手机 3x 屏清晰度，
@@ -30,7 +41,10 @@
     showSourceLabel: true,
     pos: null,
     query: '',
-    radiusOnly: true,
+    radius: RADIUS,
+    radiusOnly: false,
+    history: [],
+    visits: {},
     selected: null,
     map: null,
     mapCentered: false,
@@ -105,6 +119,143 @@
       if (state.items[i].id === id) return state.items[i];
     }
     return null;
+  }
+
+  /* ---------- 搜索面板（距离快捷 / 历史搜索 / 经常去的地方） ---------- */
+
+  function radiusLabel(value) {
+    if (!value) return '全部';
+    if (value < 1000) return value + ' m 内';
+    return (value / 1000) + ' km 内';
+  }
+
+  function readLocalJson(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key) || 'null');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeLocalJson(key, data) {
+    try { localStorage.setItem(key, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function loadSearchMemory() {
+    var history = readLocalJson(HISTORY_KEY);
+    if (Array.isArray(history)) {
+      state.history = history.filter(function (text) {
+        return typeof text === 'string' && text.trim();
+      }).slice(0, HISTORY_LIMIT);
+    }
+    var visits = readLocalJson(VISITS_KEY);
+    if (visits && typeof visits === 'object') state.visits = visits;
+  }
+
+  function rememberQuery(text) {
+    var value = (text || '').trim();
+    if (!value) return;
+    state.history = state.history.filter(function (old) {
+      return old.toLowerCase() !== value.toLowerCase();
+    });
+    state.history.unshift(value);
+    state.history = state.history.slice(0, HISTORY_LIMIT);
+    writeLocalJson(HISTORY_KEY, state.history);
+  }
+
+  function rememberVisit(id) {
+    if (!id) return;
+    state.visits[id] = (state.visits[id] || 0) + 1;
+    writeLocalJson(VISITS_KEY, state.visits);
+  }
+
+  function frequentItems(limit) {
+    var out = [];
+    for (var id in state.visits) {
+      if (!Object.prototype.hasOwnProperty.call(state.visits, id)) continue;
+      var item = byId(id);
+      if (!item) continue;
+      out.push({ item: item, count: state.visits[id] || 0 });
+    }
+    out.sort(function (a, b) { return b.count - a.count; });
+    return out.slice(0, limit || 6);
+  }
+
+  function closeSearchPanel() {
+    var panel = $('searchPanel');
+    if (panel) panel.hidden = true;
+  }
+
+  function renderSearchPanel() {
+    var historySec = $('historySec');
+    var historyChips = $('historyChips');
+    historyChips.innerHTML = '';
+    historySec.hidden = !state.history.length;
+    state.history.forEach(function (text) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mn-chip';
+      btn.textContent = text;
+      btn.setAttribute('data-history', text);
+      historyChips.appendChild(btn);
+    });
+
+    var frequentSec = $('frequentSec');
+    var frequentList = $('frequentList');
+    frequentList.innerHTML = '';
+    var frequent = frequentItems(6);
+    frequentSec.hidden = !frequent.length;
+    frequent.forEach(function (entry) {
+      var li = document.createElement('li');
+      li.setAttribute('data-id', entry.item.id);
+      var name = document.createElement('span');
+      name.textContent = entry.item.name;
+      li.appendChild(name);
+      var meta = document.createElement('span');
+      meta.className = 'mn-freq-meta';
+      var dist = distanceOf(entry.item);
+      meta.textContent = dist === null ? '查看 ' + entry.count + ' 次' : fmtDist(dist);
+      li.appendChild(meta);
+      frequentList.appendChild(li);
+    });
+
+    $('panelHint').hidden = Boolean(state.history.length || frequent.length);
+  }
+
+  function openSearchPanel() {
+    if (state.query.trim()) return;
+    closeRadiusMenu();
+    renderSearchPanel();
+    $('searchPanel').hidden = false;
+  }
+
+  function closeRadiusMenu() {
+    var menu = $('radiusMenu');
+    if (!menu || menu.hidden) return;
+    menu.hidden = true;
+    $('radiusBtn').setAttribute('aria-expanded', 'false');
+  }
+
+  function renderRadiusMenu() {
+    var menu = $('radiusMenu');
+    menu.innerHTML = '';
+    DISTANCE_OPTIONS.forEach(function (opt) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mn-radius-opt';
+      btn.setAttribute('data-radius', String(opt.value));
+      var active = opt.value === 0 ? !state.radiusOnly : (state.radiusOnly && state.radius === opt.value);
+      if (active) btn.className += ' is-active';
+      btn.textContent = opt.label;
+      menu.appendChild(btn);
+    });
+  }
+
+  function openRadiusMenu() {
+    closeSearchPanel();
+    renderRadiusMenu();
+    $('radiusMenu').hidden = false;
+    $('radiusBtn').setAttribute('aria-expanded', 'true');
   }
 
   /* ---------- 数据 ---------- */
@@ -459,7 +610,7 @@
       if (!matchesQuery(item)) continue;
       var dist = distanceOf(item);
       item._dist = dist;
-      if (state.radiusOnly && dist !== null && dist > RADIUS) continue;
+      if (state.radiusOnly && dist !== null && dist > state.radius) continue;
       out.push(item);
     }
     if (state.pos) {
@@ -482,7 +633,7 @@
       return '已显示全部收藏。点右上角 ◎ 定位，或在地图上点一下设定「我在这」。';
     }
     if (state.radiusOnly) {
-      return '附近 ' + (RADIUS / 1000) + ' km 内没有收藏。点上面的「' + (RADIUS / 1000) + ' km 内」切换为全部。';
+      return '附近 ' + radiusLabel(state.radius) + '没有收藏。点上面的「' + radiusLabel(state.radius) + '」切换为全部。';
     }
     return '暂时没有可显示的地点。';
   }
@@ -561,9 +712,9 @@
     $('listCount').textContent = countText;
     var radiusBtn = $('radiusBtn');
     var radiusOn = Boolean(state.pos) && state.radiusOnly;
-    radiusBtn.textContent = radiusOn ? (RADIUS / 1000) + ' km 内' : '全部';
+    radiusBtn.textContent = radiusOn ? radiusLabel(state.radius) : '全部';
     radiusBtn.classList.toggle('is-off', !radiusOn);
-    radiusBtn.title = state.pos ? '切换「附近 / 全部」' : '先定位后才能按距离筛选';
+    radiusBtn.title = state.pos ? '按距离筛选' : '先定位后才能按距离筛选';
 
     var empty = $('empty');
     empty.hidden = items.length > 0;
@@ -581,6 +732,8 @@
     if (!item) return;
 
     state.selected = id;
+    if (state.query.trim()) rememberQuery(state.query);
+    rememberVisit(id);
     var dist = distanceOf(item);
     $('dName').textContent = item.name;
 
@@ -708,6 +861,8 @@
       }
       if (!$('detail').hidden) closeDetail();
     });
+    // 缩放后按新的屏幕距离重新聚合（平移不影响：聚类按该缩放级别的世界像素计算）
+    state.map.on('zoomend', function () { renderMarkers(); });
     centerMap();
     updateMeMarker();
     renderMarkers();
@@ -758,6 +913,72 @@
     state.mapCentered = true;
   }
 
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var STAR_PATH = 'M12 2.4l2.94 5.96 6.58.96-4.76 4.64 1.12 6.55L12 17.42l-5.88 3.09 1.12-6.55-4.76-4.64 6.58-.96z';
+  var CLUSTER_DIST = 42; // 屏幕像素：两颗星靠得比这更近就合并成一颗
+
+  function starSvg() {
+    var svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('class', 'mn-star');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    var path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', STAR_PATH);
+    svg.appendChild(path);
+    return svg;
+  }
+
+  // 单个收藏点的标记内容：百度地图样式金色五角星 + 选中时浮出地点名
+  function markerContent(item) {
+    var wrap = document.createElement('div');
+    wrap.className = 'mn-star-wrap' + (state.selected === item.id ? ' is-active' : '');
+    var label = document.createElement('span');
+    label.className = 'mn-star-label';
+    label.textContent = item.name;
+    wrap.appendChild(starSvg());
+    wrap.appendChild(label);
+    return wrap;
+  }
+
+  // 聚合标记：星标内显示数量（与百度地图一致）
+  function clusterContent(count) {
+    var wrap = document.createElement('div');
+    wrap.className = 'mn-star-wrap mn-cluster';
+    var num = document.createElement('span');
+    num.className = 'mn-star-count' + (count > 99 ? ' is-compact' : '');
+    num.textContent = count > 99 ? '99+' : String(count);
+    wrap.appendChild(starSvg());
+    wrap.appendChild(num);
+    return wrap;
+  }
+
+  // 按屏幕距离聚合：位置取组内平均坐标；缩放到下一级后自动拆开
+  function clusterItems(items) {
+    var groups = [];
+    var zoom = state.map.getZoom();
+    items.forEach(function (item) {
+      var px = state.map.lngLatToPixel(new AMap.LngLat(item.lng, item.lat), zoom);
+      var x = px.getX();
+      var y = px.getY();
+      for (var i = 0; i < groups.length; i++) {
+        var dx = groups[i].x - x;
+        var dy = groups[i].y - y;
+        if (dx * dx + dy * dy <= CLUSTER_DIST * CLUSTER_DIST) {
+          groups[i].items.push(item);
+          groups[i].sumLng += item.lng;
+          groups[i].sumLat += item.lat;
+          return;
+        }
+      }
+      groups.push({ x: x, y: y, sumLng: item.lng, sumLat: item.lat, items: [item] });
+    });
+    groups.forEach(function (group) {
+      group.lng = group.sumLng / group.items.length;
+      group.lat = group.sumLat / group.items.length;
+    });
+    return groups;
+  }
+
   function renderMarkers(items) {
     if (!state.map) return;
     if (state.markers.length) {
@@ -765,17 +986,65 @@
       state.markers = [];
     }
     items = items || visibleItems();
-    state.markers = items.map(function (item) {
-      var marker = new AMap.Marker({
-        position: [item.lng, item.lat],
-        title: item.name,
-        offset: new AMap.Pixel(-7, -7),
-        content: '<div class="mn-pin' + (state.selected === item.id ? ' is-active' : '') + '"></div>'
-      });
-      marker.on('click', function () { selectItem(item.id, false); });
-      return marker;
+
+    // 选中的点单独画，不参与聚合，保证始终能看到
+    var selected = null;
+    var rest = [];
+    items.forEach(function (item) {
+      if (state.selected === item.id) selected = item;
+      else rest.push(item);
     });
+
+    var markers = [];
+    clusterItems(rest).forEach(function (group) {
+      if (group.items.length === 1) {
+        var single = group.items[0];
+        var one = new AMap.Marker({
+          position: [single.lng, single.lat],
+          title: single.name,
+          offset: new AMap.Pixel(-14, -14),
+          zIndex: 110,
+          content: markerContent(single)
+        });
+        one.on('click', function () { selectItem(single.id, false); });
+        markers.push(one);
+        return;
+      }
+      var count = group.items.length;
+      var cluster = new AMap.Marker({
+        position: [group.lng, group.lat],
+        title: count + ' 个收藏点，点一下放大查看',
+        offset: new AMap.Pixel(-17, -17),
+        zIndex: 120,
+        content: clusterContent(count)
+      });
+      cluster.on('click', function () { expandCluster(group); });
+      markers.push(cluster);
+    });
+
+    if (selected) {
+      markers.push(new AMap.Marker({
+        position: [selected.lng, selected.lat],
+        title: selected.name,
+        offset: new AMap.Pixel(-14, -14),
+        zIndex: 130,
+        content: markerContent(selected)
+      }));
+    }
+
+    state.markers = markers;
     state.map.add(state.markers);
+  }
+
+  // 点数字星：放大两级；已经到最大级别时直接打开组里第一个点
+  function expandCluster(group) {
+    var zooms = state.map.getZooms ? state.map.getZooms() : [3, 20];
+    var next = Math.min(state.map.getZoom() + 2, zooms[1]);
+    if (next <= state.map.getZoom()) {
+      selectItem(group.items[0].id, true);
+      return;
+    }
+    state.map.setZoomAndCenter(next, [group.lng, group.lat], true);
   }
 
   function updateMeMarker() {
@@ -848,8 +1117,14 @@
   /* ---------- 事件 ---------- */
 
   function bindEvents() {
-    $('searchInput').addEventListener('input', function () {
+    var searchInput = $('searchInput');
+
+    searchInput.addEventListener('focus', function () { openSearchPanel(); });
+
+    searchInput.addEventListener('input', function () {
       var value = this.value;
+      if (value.trim()) closeSearchPanel();
+      else if (document.activeElement === searchInput) openSearchPanel();
       clearTimeout(state.searchTimer);
       state.searchTimer = setTimeout(function () {
         state.query = value;
@@ -857,16 +1132,80 @@
       }, 200);
     });
 
-    $('locateBtn').addEventListener('click', function () { geolocate(true); });
-    $('metaPos').addEventListener('click', startPick);
+    searchInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        rememberQuery(this.value);
+        closeSearchPanel();
+        this.blur();
+      } else if (event.key === 'Escape') {
+        closeSearchPanel();
+      }
+    });
 
-    $('radiusBtn').addEventListener('click', function () {
-      if (!state.pos) {
+    $('radiusMenu').addEventListener('click', function (event) {
+      var btn = event.target.closest('[data-radius]');
+      if (!btn) return;
+      var value = Number(btn.getAttribute('data-radius')) || 0;
+      if (value > 0 && !state.pos) {
         toast('先点右上角 ◎ 定位，才能按距离筛选', 3000);
         return;
       }
-      state.radiusOnly = !state.radiusOnly;
+      state.radius = value || RADIUS;
+      state.radiusOnly = value > 0;
+      closeRadiusMenu();
       renderList();
+    });
+
+    $('historyChips').addEventListener('click', function (event) {
+      var btn = event.target.closest('[data-history]');
+      if (!btn) return;
+      var text = btn.getAttribute('data-history') || '';
+      searchInput.value = text;
+      state.query = text;
+      rememberQuery(text);
+      closeSearchPanel();
+      renderList();
+      searchInput.blur();
+    });
+
+    $('clearHistory').addEventListener('click', function () {
+      state.history = [];
+      writeLocalJson(HISTORY_KEY, []);
+      renderSearchPanel();
+    });
+
+    $('frequentList').addEventListener('click', function (event) {
+      var row = event.target.closest('li[data-id]');
+      if (!row) return;
+      closeSearchPanel();
+      selectItem(row.getAttribute('data-id'), true);
+    });
+
+    $('searchDone').addEventListener('click', function () {
+      closeSearchPanel();
+      searchInput.blur();
+    });
+
+    document.addEventListener('pointerdown', function (event) {
+      var menu = $('radiusMenu');
+      if (menu && !menu.hidden &&
+        !menu.contains(event.target) && !$('radiusBtn').contains(event.target)) {
+        closeRadiusMenu();
+      }
+      var panel = $('searchPanel');
+      if (panel.hidden) return;
+      if (panel.contains(event.target)) return;
+      if (searchInput.contains(event.target)) return;
+      closeSearchPanel();
+    });
+
+    $('locateBtn').addEventListener('click', function () { geolocate(true); });
+    $('metaPos').addEventListener('click', startPick);
+
+    $('radiusBtn').addEventListener('click', function (event) {
+      event.stopPropagation();
+      if ($('radiusMenu').hidden) openRadiusMenu();
+      else closeRadiusMenu();
     });
 
     $('sourceFilter').addEventListener('click', function (event) {
@@ -1019,6 +1358,7 @@
   }
 
   function init() {
+    loadSearchMemory();
     bindEvents();
     initMap();
 

@@ -73,11 +73,12 @@ Safari / Chrome 里「添加到主屏幕」，用起来跟 App 一样。
 4. 看到「高德登录态：有效」就完成了，登录动作始终由你本人确认
 
 ### 同步节奏（v0.9.9 多用户）
-- 服务器 `map-notes-sync.timer` **每小时**检查一次：谁距上次尝试超过 20 小时、就排进队列
+- 服务器 `map-notes-sync.timer` **每小时**检查一次：谁距上次尝试超过 `MN_SYNC_INTERVAL_HOURS`（默认 20 小时）就排进队列
+- **调整间隔**：改 `tools/systemd/map-notes-sync.service` 里的 `Environment=MN_SYNC_INTERVAL_HOURS=20`（或写进 `/etc/map-notes/secrets.env`），同步到服务器后 `sudo systemctl daemon-reload`；调大更省请求、更不易触发风控，调小更新更勤
 - `sync_worker.py` **串行**抓取（一次最多 2 个），避免 2C2G 上多个无头 Chrome 同时跑把内存打满
-- 收藏刚改过想立刻拉：`/admin` → 「立即同步收藏」（只同步当前登录账户，20–60 秒）
+- 收藏刚改过想立刻拉：`/admin` 或「我的」页 → 「立即同步收藏」（只同步当前登录账户，20–60 秒）
 - 页面顶部显示「更新于 X 小时前」；超过 72 小时会标红
-- 登录态失效：页面提示 + 飞书提醒（`/etc/map-notes/secrets.env` 里配 `FEISHU_WEBHOOK` 后生效）
+- 登录态失效：同步失败时自动把 `/admin` 的登录态标记为「已过期 / 未登录」，页面提示 + 飞书提醒（`/etc/map-notes/secrets.env` 里配 `FEISHU_WEBHOOK` 后生效）；「我的」页同步卡会直接给「去重新扫码」入口
 - 一键清除登录态：`/admin` → 「清除高德登录态」（只清自己的）
 
 ### 服务器上的东西（排错用）
